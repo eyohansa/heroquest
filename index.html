@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html >
+<head>
+	<title>Yet Another Clicker Game</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+	<script src="game.js"></script>
+</head>
+<body ng-app='HeroicAdventure'>
+	<div ng-controller="CharacterCtrl as character" class='container'>
+		<div id='stats'>
+			<span ng-model="character.heroName"></span>
+			<span>Level:</span> {{character.level}}
+			<span>Experience:</span> {{character.experiencePoints}}
+		</div>
+		<div class='center-block'>
+			<div class='container'>
+				<button class='btn btn-default' ng-click="character.gainExperiencePoints(1)">Fight Wooden Statue
+				</button>
+				<button class='btn btn-default' ng-click="character.gainExperiencePoints(10)" ng-show='character.power >= 5'>Fight Rat</button>
+				<button class='btn btn-default' ng-click='character.gainExperiencePoints(20)' ng-show='character >= 10'>Fight Kobold</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

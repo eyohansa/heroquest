@@ -13,7 +13,7 @@
 	<div ng-controller="CharacterCtrl as character" class='container'>
 	
 		<div id='stats'>
-			<span ng-model="character.hero.name"></span>
+			<span>Name: </span><input ng-model="character.hero.name" type="text" /><br />
 			<span>Level:</span> {{character.hero.level}}
 			<span>Experience:</span> {{character.hero.experiencePoints}}
 			<span>Health:</span> {{character.hero.currentHealth}}/{{character.hero.maxHealth}}

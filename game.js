@@ -54,8 +54,8 @@ setInterval(function(){
 		*/
 
 		rest = $interval(function() {
-			injectTemp.hero.currentHealth += hero.regen.health;
-			injectTemp.hero.stamina += hero.regen.stamina;
+			injectTemp.hero.currentHealth += injectTemp.hero.regen.health;
+			injectTemp.hero.stamina += injectTemp.hero.regen.stamina;
 			injectTemp.day ++
 		}, 1000);
 		

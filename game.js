@@ -166,5 +166,5 @@
 		
 	});
 
-	game.controller()
 })(window.angular);
+

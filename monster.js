@@ -12,6 +12,7 @@
 			maxHealth: 1,
 
 			power: 0,
+			stamina: 1,
 			//skill: [something],
 			
 			regen: {
@@ -32,6 +33,7 @@
 			maxHealth: 10,
 
 			power: 1,
+			stamina: 2,
 			//skill: [something],
 			
 			regen: {
@@ -52,6 +54,7 @@
 			maxHealth: 15,
 
 			power: 3,
+			stamina: 3,
 			//skill: [something],
 			
 			regen: {
@@ -72,6 +75,7 @@
 			maxHealth: 40,
 
 			power: 5,
+			stamina: 4,
 			//skill: [something],
 			
 			regen: {

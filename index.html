@@ -2,8 +2,9 @@
 <html >
 <head>
 	<title>Yet Another Clicker Game</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="theme.css"/>
+ 	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 	<script src="game.js"></script>
@@ -13,21 +14,26 @@
 	<div ng-controller="CharacterCtrl as character" class='container'>
 	
 		<div id='stats'>
-			<span>Name: </span><input ng-model="character.hero.name" type="text" /><br />
-			<span>Level:</span> {{character.hero.level}}
-			<span>Experience:</span> {{character.hero.experiencePoints}}
+			<span>Name:</span> <input ng-model="character.hero.name" type="text" /><br />
+			<span>Level:</span> {{character.hero.level}}<br />
+			<span>Experience:</span> {{character.hero.experiencePoints}}<br />
 			<br><span>Health:</span> {{character.hero.currentHealth}}/{{character.hero.maxHealth}} (Regen +{{character.hero.regen.health}})
 			<br><span>Stamina:</span> {{character.hero.currentStamina}}/{{character.hero.maxStamina}} (Regen +{{character.hero.regen.stamina}})
+			<div ng-show="character.hero.gold > 0"><span>Gold:</span> {{character.hero.gold}}</div> <br />
 		</div>
 		<br>
 		
-		<div ng-controller="MonsterData as monster" class='center-block'>
-			<div ng-controller="ActionCtrl as action">
+		<div id="divAction" ng-controller="ActionCtrl as action">
+			<div ng-controller="MonsterData as monster" class='center-block'>
 				<div class='container' ng-repeat="mons in monster.monstah">
-					<button class='btn btn-default' ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}} (HP:{{mons.currentHealth}}/{{mons.maxHealth}})</button>
+					<button class='btn btn-default' ng-disabled="character.hero.stamina <= 0" ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}}</button>
 				</div>
 				<div ng-show="action.victoryMessage.canShow">{{action.victoryMessage.textMessage}}</div>
 			</div>
+		</div>
+
+		<div id="divJournal">
+
 		</div>
 		
 	</div>

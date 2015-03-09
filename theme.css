@@ -1,0 +1,12 @@
+div.container {
+	margin-bottom: 5px;
+}
+
+div#stats {
+	float: left;
+	width: 300px;
+}
+
+div#divAction {
+	left: 300px;
+}

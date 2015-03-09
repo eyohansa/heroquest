@@ -11,16 +11,16 @@
 <body ng-app='HeroicAdventure'>
 	<div ng-controller="CharacterCtrl as character" class='container'>
 		<div id='stats'>
-			<span ng-model="character.heroName"></span>
-			<span>Level:</span> {{character.level}}
-			<span>Experience:</span> {{character.experiencePoints}}
+			<span ng-model="character.hero.name"></span>
+			<span>Level:</span> {{character.hero.level}}
+			<span>Experience:</span> {{character.hero.experiencePoints}}
 		</div>
-		<div class='center-block'>
+		<div ng-controller="ActionCtrl as action" class='center-block'>
 			<div class='container'>
-				<button class='btn btn-default' ng-click="character.gainExperiencePoints(1)">Fight Wooden Statue
+				<button class='btn btn-default' ng-click="character.act(action.fightPracticeDoll())">Fight Wooden Statue
 				</button>
-				<button class='btn btn-default' ng-click="character.gainExperiencePoints(10)" ng-show='character.power >= 5'>Fight Rat</button>
-				<button class='btn btn-default' ng-click='character.gainExperiencePoints(20)' ng-show='character >= 10'>Fight Kobold</button>
+				<button class='btn btn-default' ng-click="character.act(action.fightRat())" ng-show='character.hero.power >= 5'>Fight Rat</button>
+				<button class='btn btn-default' ng-click="character.act(action.fightKobold())" ng-show='character.hero.power >= 10'>Fight Kobold</button>
 			</div>
 		</div>
 	</div>

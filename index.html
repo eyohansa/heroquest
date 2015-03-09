@@ -16,12 +16,13 @@
 			<span ng-model="character.hero.name"></span>
 			<span>Level:</span> {{character.hero.level}}
 			<span>Experience:</span> {{character.hero.experiencePoints}}
+			<span>Health:</span> {{character.hero.currentHealth}}/{{character.hero.maxHealth}}
 		</div>
 		
 		<div ng-controller="MonsterData as monster" class='center-block'>
 			<div ng-controller="ActionCtrl as action">
 				<div class='container' ng-repeat="mons in monster.monstah">
-					<button class='btn btn-default' ng-click="action.battle" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}}</button>
+					<button class='btn btn-default' ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}}</button>
 				</div>
 			</div>
 		</div>

@@ -69,7 +69,7 @@
 			levelReq: 10,
 
 			currentHealth: 40,
-			maxHealth: 04,
+			maxHealth: 40,
 
 			power: 5,
 			//skill: [something],

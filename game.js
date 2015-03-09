@@ -1,7 +1,11 @@
+setInterval(function(){
+     
+},5000);
+
 (function(angular) {
 	var game = angular.module("HeroicAdventure", ['Monsters']);
 
-	game.controller("CharacterCtrl", function() {
+	game.controller("CharacterCtrl", ['$interval', function($interval) {
 		this.day++;
 
 		this.hero = {
@@ -19,6 +23,8 @@
 			}
 		}
 		
+		var injectTemp = this;
+		
 		/**
 		 * Level player up.
 		 */
@@ -30,18 +36,11 @@
 		}
 
 		/**
-		 * Calculate the required experience points to level up.
-		 * @return {integer} Required experience points to level up.
-		 */
-		this.getRequiredExperiencePointsToLevel = function() {
-			return (this.hero.level * this.hero.level) + (10 * this.hero.level);
-		}
-
-		/**
 		 *	@param actionResult The result of action taken by the player.
 		 *
 		 *	This function process the result of the action taken by the player.
 		 */
+		 /*
 		this.act = function(actionResult) {
 			this.hero.currentHealth -= actionResult.cost.health;
 			this.hero.stamina -= actionResult.cost.stamina;
@@ -52,20 +51,51 @@
 
 			this.day += actionResult.cost.day;
 		}
+		*/
 
-		this.rest = function() {
-			this.hero.health += hero.regen.health;
-			this.hero.stamina += hero.regen.stamina;
-			this.day ++;
-		}
-	});
+		rest = $interval(function() {
+			injectTemp.hero.currentHealth += hero.regen.health;
+			injectTemp.hero.stamina += hero.regen.stamina;
+			injectTemp.day ++
+		}, 1000);
+		
+	}]);
 
 	game.controller("ActionCtrl", function() {
 		this.explore = function() {
 
 		}
 
-		this.battle = function(idMonster) {
+		/**
+		 * Calculate the required experience points to level up.
+		 * @return {integer} Required experience points to level up.
+		 */
+		this.getRequiredExperiencePointsToLevel = function(charHero) {
+			return (charHero.level * charHero.level) + (10 * charHero.level);
+		}
+
+		this.battle = function(charHero, monsData) {
+			charHero.currentHealth -= monsData.power;
+			monsData.currentHealth -= charHero.power;
+			
+			// Check if enemy is dead
+			if (monsData.currentHealth <= 0){
+				charHero.experiencePoints += monsData.expDrop;
+				charHero.gold += monsData.goldDrop;
+				monsData.currentHealth = monsData.maxHealth;
+				
+				if (charHero.experiencePoints >= this.getRequiredExperiencePointsToLevel(charHero)){
+					charHero.level++;
+					charHero.power++;
+					charHero.experiencePoints = 0;
+				}
+			}
+			
+			// Check if player is dead
+			if (charHero.currentHealth <= 0){
+				charHero.currentHealth = 1;
+				monsData.currentHealth = monsData.maxHealth;
+			}
 			
 		}
 	});

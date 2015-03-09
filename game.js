@@ -1,11 +1,11 @@
 (function(angular) {
-	var game = angular.module("HeroicAdventure", []);
+	var game = angular.module("HeroicAdventure", ['Monsters']);
 
 	game.controller("CharacterCtrl", function() {
 		this.day++;
 
 		this.hero = {
-			name: "Hero",
+			name: "Rat Hater",
 			experiencePoints: 0,
 			level: 1,
 			gold: 0,
@@ -14,7 +14,7 @@
 			power: 1,
 			stamina: 10,
 			regen: {
-				health: 3,
+				health: 2,
 				stamina: 5
 			}
 		}
@@ -65,46 +65,8 @@
 
 		}
 
-		this.fightPracticeDoll = function() {
-			return {
-				cost: {
-					health: 0,
-					stamina: 1,
-					days: 1
-				},
-				gain: {
-					experiencePoints: 1,
-					gold: 0
-				}
-			}
-		}
-
-		this.fightRat = function() {
-			return {
-				cost: {
-					health: 1,
-					stamina: 1,
-					days: 1
-				},
-				gain: {
-					experiencePoints: 5,
-					gold: 1
-				}
-			}
-		}
-
-		this.fightKobold = function() {
-			return {
-				cost: {
-					health: 2,
-					stamina: 2,
-					days: 1
-				},
-				gain: {
-					experiencePoints: 10,
-					gold: 3
-				}
-			}
+		this.battle = function(idMonster) {
+			
 		}
 	});
 

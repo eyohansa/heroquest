@@ -53,10 +53,16 @@ setInterval(function(){
 		}
 		*/
 
-		rest = $interval(function() {
-			injectTemp.hero.currentHealth += injectTemp.hero.regen.health;
+		var regen = $interval(function() {
+
+			if (injectTemp.hero.currentHealth < injectTemp.hero.maxHealth) {
+				injectTemp.hero.currentHealth += injectTemp.hero.regen.health;
+			} else if (injectTemp.hero.currentHealth > injectTemp.hero.maxHealth) {
+				injectTemp.hero.currentHealth = injectTemp.hero.maxHealth;
+			}
+
 			injectTemp.hero.stamina += injectTemp.hero.regen.stamina;
-			injectTemp.day ++
+			injectTemp.day++
 		}, 1000);
 		
 	}]);

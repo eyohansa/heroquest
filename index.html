@@ -25,8 +25,8 @@
 		<br>
 		
 		<div id="divAction" ng-controller="ActionCtrl as action">
-			<div ng-controller="MonsterData as monster" class='center-block'>
-				<div class='container' ng-repeat="mons in monster.monstah">
+			<div ng-controller="MonsterData as monster">
+				<div ng-repeat="mons in monster.monstah">
 					<button class='monster btn btn-default' ng-disabled="character.hero.stamina <= 0" ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}} [HP: {{mons.currentHealth}}/{{mons.maxHealth}}]</button>
 				</div>
 				<div ng-show="action.victoryMessage.canShow">{{action.victoryMessage.textMessage}}</div>
@@ -36,7 +36,6 @@
 		<div id="divJournal">
 
 		</div>
-		
 	</div>
 </body>
 </html>

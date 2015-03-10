@@ -1,12 +1,14 @@
-div.container {
-	margin-bottom: 5px;
-}
-
 div#stats {
 	float: left;
 	width: 300px;
+	height: 400px;
 }
 
 div#divAction {
 	margin-left: 300px;
+}
+
+div#divJournal {
+	position: fixed;
+	top: 400px;
 }

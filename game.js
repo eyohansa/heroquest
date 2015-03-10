@@ -1,7 +1,31 @@
 (function(angular) {
 	var game = angular.module("HeroicAdventure", ['Monsters']);
 
-	game.controller("CharacterCtrl", ['$interval', function($interval) {
+	game.factory('journalService', function() {
+		var journal = {};
+
+		var entryQueue = [];
+
+		journal.write = function(message) {
+			if (entryQueue.push(message + '<br />') > 5) {
+				entryQueue.shift();
+			}
+
+			$("#divJournal").html(entryQueue);
+		}
+
+		journal.save = function() {
+			// Game saving will be performed here.
+		}
+
+		journal.load = function() {
+			// Game loading will be performed here.
+		}
+
+		return journal;
+	});
+
+	game.controller("CharacterCtrl", ['$interval', 'journalService', function($interval, journalService) {
 		this.day = 0;
 
 		this.hero = {
@@ -26,7 +50,6 @@
 		 * Level player up.
 		 */
 		this.levelUp = function() {
-			console.log("You have leveled up!");
 			this.hero.level++;
 			this.hero.power++;
 			this.hero.experiencePoints = 0;
@@ -81,7 +104,7 @@
 		}, 10 * TIME_SECOND_CONSTANT);
 	}]);
 
-	game.controller("ActionCtrl", function() {
+	game.controller("ActionCtrl", ['journalService', function(journalService) {
 		
 		/////// Notification Functions
 		
@@ -125,6 +148,7 @@
 					charHero.gold += monsData.goldDrop;
 					monsData.currentHealth = monsData.maxHealth;
 					this.setVictoryMessage("You defeated "+monsData.name+". You gained "+monsData.expDrop+" exp and "+monsData.goldDrop+" gold.");
+					journalService.write(charHero.name + " has defeated " + monsData.name);
 					
 					// Check if hero can level up
 					if (charHero.experiencePoints >= this.getRequiredExperiencePointsToLevel(charHero)){
@@ -146,6 +170,7 @@
 				
 				// Check if player is dead
 				if (charHero.currentHealth <= 0){
+					journalService.write("You barely escaped with your life from " + monsData.name);
 					charHero.currentHealth = 1;
 					monsData.currentHealth = monsData.maxHealth;
 				}
@@ -166,7 +191,7 @@
 		}
 
 		
-	});
+	}]);
 
 })(window.angular);
 

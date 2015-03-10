@@ -2,7 +2,7 @@
 	var game = angular.module("HeroicAdventure", ['Monsters']);
 
 	game.controller("CharacterCtrl", ['$interval', function($interval) {
-		this.day++;
+		this.day = 0;
 
 		this.hero = {
 			name: "Rat Hater",
@@ -73,10 +73,12 @@
 			if (injectTemp.hero.currentStamina >= injectTemp.hero.maxStamina) {
 				injectTemp.hero.currentStamina = injectTemp.hero.maxStamina;
 			}
-
-			injectTemp.day++
 		}, TIME_SECOND_CONSTANT);
 		
+		var daybreak = $interval(function() {
+			// New day every 10s.
+			injectTemp.day++;
+		}, 10 * TIME_SECOND_CONSTANT);
 	}]);
 
 	game.controller("ActionCtrl", function() {

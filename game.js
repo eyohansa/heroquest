@@ -160,7 +160,7 @@
 		 * @return {integer} Required experience points to level up.
 		 */
 		this.getRequiredExperiencePointsToLevel = function(charHero) {
-			return (charHero.level * charHero.level) + (10 * charHero.level);
+			return (charHero.level * charHero.level) + (5 * charHero.level);
 		}
 
 		

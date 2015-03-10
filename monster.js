@@ -28,7 +28,7 @@
 			name: "Rat",
 			levelReq: 3,
 
-			currentHealth: 5,
+			currentHealth: 10,
 			maxHealth: 10,
 
 			power: 1,

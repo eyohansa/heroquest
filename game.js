@@ -1,7 +1,3 @@
-setInterval(function(){
-     
-},5000);
-
 (function(angular) {
 	var game = angular.module("HeroicAdventure", ['Monsters']);
 
@@ -16,10 +12,11 @@ setInterval(function(){
 			currentHealth: 10,
 			maxHealth: 10,
 			power: 1,
-			stamina: 10,
+			currentStamina: 10,
+			maxStamina: 10,
 			regen: {
 				health: 2,
-				stamina: 5
+				stamina: 3
 			}
 		}
 		
@@ -53,25 +50,111 @@ setInterval(function(){
 		}
 		*/
 
+		// Hero's health and stamina regen. Regen is set at every second.
+		var TIME_SECOND_CONSTANT=1000; //1 second equal to 1000
 		var regen = $interval(function() {
 
+			// Add HP if HP is less than max HP
 			if (injectTemp.hero.currentHealth < injectTemp.hero.maxHealth) {
 				injectTemp.hero.currentHealth += injectTemp.hero.regen.health;
-			} else if (injectTemp.hero.currentHealth > injectTemp.hero.maxHealth) {
-				injectTemp.hero.currentHealth = injectTemp.hero.maxHealth;
 			}
 
-			injectTemp.hero.stamina += injectTemp.hero.regen.stamina;
+			// Add stamina if stamina is less than max stamina
+			if (injectTemp.hero.currentStamina < injectTemp.hero.maxStamina) {
+				injectTemp.hero.currentStamina += injectTemp.hero.regen.stamina;
+			}
+			
+			// Checks for overflow in HP due to regen
+			if (injectTemp.hero.currentHealth >= injectTemp.hero.maxHealth) {
+				injectTemp.hero.currentHealth = injectTemp.hero.maxHealth;
+			}
+			
+			// Checks for overflow in stamina due to regen
+			if (injectTemp.hero.currentStamina >= injectTemp.hero.maxStamina) {
+				injectTemp.hero.currentStamina = injectTemp.hero.maxStamina;
+			}
+
 			injectTemp.day++
-		}, 1000);
+		}, TIME_SECOND_CONSTANT);
 		
 	}]);
 
 	game.controller("ActionCtrl", function() {
+		
+		/////// Notification Functions
+		
+		this.victoryMessage = {
+			textMessage: "",
+			canShow: false
+		}
+		
+		this.setVictoryMessage = function(message){
+			this.victoryMessage.textMessage = message;
+			this.victoryMessage.canShow = true;
+		}
+		
+		this.eraseVictoryMessage = function(){
+			this.victoryMessage.textMessage = "";
+			this.victoryMessage.canShow = false;
+		}
+		
+		/////// Exploration Functions
+		
 		this.explore = function() {
 
 		}
 
+		/////// Battle Functions
+		
+		this.battle = function(charHero, monsData) {
+			//Use 1 stamina for attack
+			charHero.currentStamina -= 1;
+			
+			//Check if hero stamina is depleted. If hero tries to attack with stamina at 0, nothing will happen.
+			if(charHero.currentStamina >= 0){
+			
+				//Damage both side of combatants
+				charHero.currentHealth -= monsData.power;
+				monsData.currentHealth -= charHero.power;
+				
+				// Check if enemy is dead
+				if (monsData.currentHealth <= 0){
+					charHero.experiencePoints += monsData.expDrop;
+					charHero.gold += monsData.goldDrop;
+					monsData.currentHealth = monsData.maxHealth;
+					this.setVictoryMessage("You defeated "+monsData.name+". You gained "+monsData.expDrop+" exp and "+monsData.goldDrop+" gold.");
+					
+					// Check if hero can level up
+					if (charHero.experiencePoints >= this.getRequiredExperiencePointsToLevel(charHero)){
+						charHero.level += 1;
+						charHero.power += 1;
+						charHero.maxHealth += 2;
+						charHero.maxStamina += 3;
+						charHero.experiencePoints = 0;
+						
+						//Increase hero health and stamina regen every 3 level
+						if (charHero.level%3===0){
+							charHero.regen.health += 0.5;
+							charHero.regen.stamina += 0.75;
+						}
+					}
+				} else {
+					this.eraseVictoryMessage();
+				}
+				
+				// Check if player is dead
+				if (charHero.currentHealth <= 0){
+					charHero.currentHealth = 1;
+					monsData.currentHealth = monsData.maxHealth;
+				}
+			} else {
+				charHero.currentStamina = 0;
+			}
+			
+		}
+		
+		/////// Other Functions
+		
 		/**
 		 * Calculate the required experience points to level up.
 		 * @return {integer} Required experience points to level up.
@@ -80,30 +163,7 @@ setInterval(function(){
 			return (charHero.level * charHero.level) + (10 * charHero.level);
 		}
 
-		this.battle = function(charHero, monsData) {
-			charHero.currentHealth -= monsData.power;
-			monsData.currentHealth -= charHero.power;
-			
-			// Check if enemy is dead
-			if (monsData.currentHealth <= 0){
-				charHero.experiencePoints += monsData.expDrop;
-				charHero.gold += monsData.goldDrop;
-				monsData.currentHealth = monsData.maxHealth;
-				
-				if (charHero.experiencePoints >= this.getRequiredExperiencePointsToLevel(charHero)){
-					charHero.level++;
-					charHero.power++;
-					charHero.experiencePoints = 0;
-				}
-			}
-			
-			// Check if player is dead
-			if (charHero.currentHealth <= 0){
-				charHero.currentHealth = 1;
-				monsData.currentHealth = monsData.maxHealth;
-			}
-			
-		}
+		
 	});
 
 	game.controller()

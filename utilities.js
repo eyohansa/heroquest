@@ -4,10 +4,19 @@
  * @param  {Number} max The maximum value.
  * @return {Number}     The generated random number.
  */
-var attackRNG = function (min, max) {
-	return Math.round(Math.random() * (max - min + 1) + min);
+var random = function (min, max) {
+	return Math.random() * (max - min + 1) + min;
 };
 
+/**
+ * Generate a random Integer number between min(included) and max (included).
+ * @param  {Number} min The minimum value.
+ * @param  {Number} max The maximum value.
+ * @return {Number}     The generated random Integer number.
+ */
+var randomInt = function (min, max) {
+	return Math.floor( random(min, max));
+};
 
 
 // AttackType = Slash, Piercing, Blunt, Magic, Neutral

@@ -3,11 +3,11 @@
 
 	game.factory('journalService', function () {
 		var journal = {};
-
 		var entryQueue = [];
+		var queueCap = 10;
 
 		journal.write = function (message) {
-			if (entryQueue.push(message + '<br />') > 5) {
+			if (entryQueue.push(message + '<br />') > queueCap) {
 				entryQueue.shift();
 			}
 

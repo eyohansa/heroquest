@@ -50,7 +50,7 @@
             // Also, skills can be put in here, if necessary.
             attackType: [{
                 attackName: "Slash",
-                damageType: "Slash"
+                damageType: "Slash",
                 staminaUsage: 1
             },
             {

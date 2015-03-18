@@ -179,14 +179,14 @@
 						charHero.maxStamina += 3;
 						charHero.experiencePoints = 0;
                         //this.setGameMessage(2, "You levelled up and gained +1 power, +2 health and +3 stamina");
-						journalService.write("You levelled up and gained +5 power, +20 health and +3 stamina");
+						journalService.write(">>>>>>You levelled up and gained +5 power, +20 health and +3 stamina");
                         
 						//Increase hero health and stamina regen every 3 level
 						if (charHero.level%3===0){
 							charHero.regen.health += 3;
 							charHero.regen.stamina += 0.75;
                             //this.setGameMessage(3, "Also, you gained 0.5 health regen and 0.75 stamina regen");
-                            journalService.write("Also, you gained 0.5 health regen and 0.75 stamina regen");
+                            journalService.write(">>>>>>Also, you gained 0.5 health regen and 0.75 stamina regen");
 						}
 					}
 				}

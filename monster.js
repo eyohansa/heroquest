@@ -29,10 +29,10 @@
 			name: "Rat",
 			levelReq: 3,
 
-			currentHealth: 20,
-			maxHealth: 20,
+			currentHealth: 25,
+			maxHealth: 25,
 
-			power: 5,
+			power: 10,
 			stamina: 2,
 			//skill: [something],
 			
@@ -50,10 +50,10 @@
 			name: "Bad Ratz",
 			levelReq: 5,
 
-			currentHealth: 35,
-			maxHealth: 35,
+			currentHealth: 50,
+			maxHealth: 50,
 
-			power: 12,
+			power: 20,
 			stamina: 3,
 			//skill: [something],
 			
@@ -71,10 +71,10 @@
 			name: "Legion of Bad Ratz",
 			levelReq: 10,
 
-			currentHealth: 60,
-			maxHealth: 60,
+			currentHealth: 125,
+			maxHealth: 125,
 
-			power: 20,
+			power: 30,
 			stamina: 4,
 			//skill: [something],
 			

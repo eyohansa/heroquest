@@ -18,6 +18,7 @@
 			<span>Name:</span> <input ng-model="character.hero.name" type="text" /><br />
 			<span>Level:</span> {{character.hero.level}}<br />
 			<span>Experience:</span> {{character.hero.experiencePoints}}<br />
+			<br>	<span>Power:</span>	{{character.hero.power}}
 			<br>	<span>Health:</span>	<span ng-class="{low:(character.hero.currentHealth/character.hero.maxHealth) < 0.25}"> {{character.hero.currentHealth}}/{{character.hero.maxHealth}}</span> (+{{character.hero.regen.health}})
 			<br>	<span>Stamina:</span>	<span ng-class="{low:(character.hero.currentStamina/character.hero.maxStamina) < 0.25}"> {{character.hero.currentStamina}}/{{character.hero.maxStamina}}</span> (+{{character.hero.regen.stamina}})
 			<div><span>Day:</span> {{character.day}}</div>

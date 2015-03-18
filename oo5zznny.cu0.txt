@@ -1,0 +1,27 @@
+﻿+Attack to/from enemy is now RNG based.
++Increased Health and Power to be usable for random function.
++Power of character is now displayed.
++Health and Stamina text goes red when their value is lower than 25%.
+
+-Old notification system is not used anymore, only journal log is used now.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch develop
+# Your branch is up-to-date with 'origin/develop'.
+#
+# Changes to be committed:
+#	modified:   game.js
+#	modified:   index.html
+#	new file:   it0wecpi.pj3.txt
+#	modified:   monster.js
+#	modified:   theme.css
+#	modified:   utilities.js
+#
+# Changes not staged for commit:
+#	modified:   game.js
+#	modified:   index.html
+#	deleted:    it0wecpi.pj3.txt
+#	modified:   monster.js
+#
+

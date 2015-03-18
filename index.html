@@ -7,9 +7,9 @@
  	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+	<script src="utilities.js"></script>
 	<script src="game.js"></script>
 	<script src="monster.js"></script>
-	<script src="utilities.js"></script>
 </head>
 <body ng-app='HeroicAdventure'>
 	<div ng-controller="CharacterCtrl as character" class='container'>
@@ -18,8 +18,8 @@
 			<span>Name:</span> <input ng-model="character.hero.name" type="text" /><br />
 			<span>Level:</span> {{character.hero.level}}<br />
 			<span>Experience:</span> {{character.hero.experiencePoints}}<br />
-			<br><span>Health:</span> {{character.hero.currentHealth}}/{{character.hero.maxHealth}} (+{{character.hero.regen.health}})
-			<br><span>Stamina:</span> {{character.hero.currentStamina}}/{{character.hero.maxStamina}} (+{{character.hero.regen.stamina}})
+			<br>	<span>Health:</span>	<span ng-class="{low:(character.hero.currentHealth/character.hero.maxHealth) < 0.25}"> {{character.hero.currentHealth}}/{{character.hero.maxHealth}}</span> (+{{character.hero.regen.health}})
+			<br>	<span>Stamina:</span>	<span ng-class="{low:(character.hero.currentStamina/character.hero.maxStamina) < 0.25}"> {{character.hero.currentStamina}}/{{character.hero.maxStamina}}</span> (+{{character.hero.regen.stamina}})
 			<div><span>Day:</span> {{character.day}}</div>
 			<div ng-show="character.hero.gold > 0"><span>Gold:</span> {{character.hero.gold}}</div> <br />
 		</div>
@@ -30,7 +30,7 @@
 				<div ng-repeat="mons in monster.monstah">
 					<button class='monster btn btn-default' ng-disabled="character.hero.stamina <= 0" ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}} [HP: {{mons.currentHealth}}/{{mons.maxHealth}}]</button>
 				</div>
-				<div ng-show="action.victoryMessage.canShow">{{action.victoryMessage.textMessage}}</div>
+				<div ng-class="action.gameMessage.style" ng-show="action.gameMessage.canShow">{{action.gameMessage.textMessage}}</div>
 			</div>
 		</div>
 

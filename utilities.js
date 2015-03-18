@@ -4,6 +4,6 @@
  * @param  {Number} max The maximum value.
  * @return {Number}     The generated random number.
  */
-var random = function(min, max) {
-	return Math.floor(Math.random() * (max - min + 1) + min);
+var attackRNG = function(min, max) {
+	return Math.round(Math.random() * (max - min + 1) + min);
 }

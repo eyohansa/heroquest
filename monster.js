@@ -1,15 +1,15 @@
-(function(angular) {
+(function (angular) {
 	var monData = angular.module("Monsters", []);
 
-	monData.controller("MonsterData", function(){
+	monData.controller("MonsterData", function () {
 		
 		this.monstah = [{
 			ID: 0,
 			name: "Sewer Rat",
 			levelReq: 1,
 
-			currentHealth: 1,
-			maxHealth: 1,
+			currentHealth: 10,
+			maxHealth: 10,
 
 			power: 0,
 			stamina: 1,
@@ -21,7 +21,7 @@
 
 			expDrop: 1,
 			goldDrop: 1
-		}]
+		}];
 		
 
 		this.monstah[1] = {
@@ -29,10 +29,10 @@
 			name: "Rat",
 			levelReq: 3,
 
-			currentHealth: 10,
-			maxHealth: 10,
+			currentHealth: 20,
+			maxHealth: 20,
 
-			power: 1,
+			power: 5,
 			stamina: 2,
 			//skill: [something],
 			
@@ -42,7 +42,7 @@
 
 			expDrop: 2,
 			goldDrop: 2
-		}
+		};
 		
 
 		this.monstah[2] = {
@@ -50,10 +50,10 @@
 			name: "Bad Ratz",
 			levelReq: 5,
 
-			currentHealth: 15,
-			maxHealth: 15,
+			currentHealth: 35,
+			maxHealth: 35,
 
-			power: 3,
+			power: 12,
 			stamina: 3,
 			//skill: [something],
 			
@@ -63,18 +63,18 @@
 
 			expDrop: 4,
 			goldDrop: 5
-		}
+		};
 		
 
 		this.monstah[3] = {
 			ID: 3,
-			name: "Even more Bad Ratz",
+			name: "Legion of Bad Ratz",
 			levelReq: 10,
 
-			currentHealth: 40,
-			maxHealth: 40,
+			currentHealth: 60,
+			maxHealth: 60,
 
-			power: 5,
+			power: 20,
 			stamina: 4,
 			//skill: [something],
 			
@@ -84,7 +84,7 @@
 
 			expDrop: 10,
 			goldDrop: 10
-		}
+		};
 		
 
 	});

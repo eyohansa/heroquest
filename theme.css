@@ -12,3 +12,7 @@ div#divJournal {
 	position: fixed;
 	top: 400px;
 }
+
+.low{
+	color: red;
+}

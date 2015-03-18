@@ -13,11 +13,8 @@
 
 			power: 0,
 			stamina: 1,
-			//skill: [something],
 			
-			regen: {
-				health: 0
-			},
+            armorType: "None",
 
 			expDrop: 1,
 			goldDrop: 1
@@ -36,9 +33,7 @@
 			stamina: 2,
 			//skill: [something],
 			
-			regen: {
-				health: 0
-			},
+            armorType: "None",
 
 			expDrop: 2,
 			goldDrop: 2
@@ -55,11 +50,8 @@
 
 			power: 20,
 			stamina: 3,
-			//skill: [something],
 			
-			regen: {
-				health: 1
-			},
+            armorType: "None",
 
 			expDrop: 4,
 			goldDrop: 5
@@ -68,19 +60,34 @@
 
 		this.monstah[3] = {
 			ID: 3,
-			name: "Legion of Bad Ratz",
+			name: "Bad Ratz with armor (what?)",
 			levelReq: 10,
 
-			currentHealth: 125,
-			maxHealth: 125,
+			currentHealth: 150,
+			maxHealth: 150,
 
 			power: 30,
 			stamina: 4,
-			//skill: [something],
 			
-			regen: {
-				health: 3
-			},
+            armorType: "LightArmor",
+
+			expDrop: 10,
+			goldDrop: 10
+		};
+		
+
+		this.monstah[3] = {
+			ID: 3,
+			name: "Magical Mouse",
+			levelReq: 12,
+
+			currentHealth: 100,
+			maxHealth: 100,
+
+			power: 50,
+			stamina: 4,
+			
+            armorType: "magicArmor",
 
 			expDrop: 10,
 			goldDrop: 10

@@ -86,9 +86,8 @@
             }
             ],
             
-            selectAttack: function(selAttackID){
-                this.selectedAttackID = selAttackID;
-                journalService.write("You chosen " + this.attackType[selAttackID].attackName);
+            selectAttack: function() {
+                journalService.write("You chosen " + this.attackType[injectTemp.hero.selectedAttackID].attackName);
             }
 		};
 		

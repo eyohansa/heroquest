@@ -31,8 +31,8 @@
                 
                 Choose your attack type:
                 <div ng-repeat="attack in character.hero.attackType">
-                    <button ng-click="character.selectAttack(attack.attackID)">{{attack.attackName}}</button>
-                    <input type="radio" name="attack" ng-model="testing" ng-change="character.selectAttack(attack.attackID)">{{attack.attackName}}
+                    <button ng-click="character.hero.selectAttack(attack.attackID)">{{attack.attackName}}</button> Cost {{attack.staminaUsage}} stamina. Deals {{attack.damageType}} damage.
+                    <!-- <input type="radio" name="attack" ng-model="testing" ng-change="character.hero.selectAttack(attack.attackID)">{{attack.attackName}} --> <!-- This one doesn't seem to work -->
                 </div><br>
                 
                 <div ng-repeat="mons in monster.monstah">

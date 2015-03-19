@@ -53,39 +53,44 @@
                 attackID:0,
                 attackName: "Slash",
                 damageType: "Slash",
-                staminaUsage: 1
+                staminaUsage: 1,
+                powerRating: 1
             },
             {
                 attackID:1,
                 attackName: "Stab",
                 damageType: "Piercing",
-                staminaUsage: 1
+                staminaUsage: 1,
+                powerRating: 1
             },
             {
                 attackID:2,
                 attackName: "Bash with Scabbard",
                 damageType: "Blunt",
-                staminaUsage: 1.5
+                staminaUsage: 1.5,
+                powerRating: 1.25
             },
             {
                 attackID:3,
                 attackName: "Poke 'em",
                 damageType: "Neutral",
-                staminaUsage: 0.5
+                staminaUsage: 0.5,
+                powerRating: 0.5
             },
             {
                 attackID:4,
                 attackName: "Conjure some balls of fire",
                 damageType: "Magic",
-                staminaUsage: 0.5
+                staminaUsage: 2,
+                powerRating: 1.5
             }
-            ]
+            ],
+            
+            selectAttack: function(selAttackID){
+                this.selectedAttackID = selAttackID;
+                journalService.write("You chosen " + this.attackType[selAttackID].attackName);
+            }
 		};
-        
-        var selectAttack = function(selAttackID){
-            this.hero.selectedAttackID = selAttackId;
-            console.log("Print this out, please");
-        }
 		
 		var injectTemp = this;
 
@@ -136,15 +141,17 @@
 			if(charHero.selectedAttackID === -1){
                 journalService.write("Yo, select your attack type first.");
             }
-            else if (charHero.currentStamina >= 1) {
+            else if (charHero.currentStamina - charHero.attackType[charHero.selectedAttackID].staminaUsage > 0) {
                 
                 //Use 1 stamina for attack
-                charHero.currentStamina -= 1;
+                charHero.currentStamina -= charHero.attackType[charHero.selectedAttackID].staminaUsage;
 			
 				//Damage damage to enemy first (enemy will deal damage if it is not dead)
-                var tempValue = random (charHero.power * 0.5, charHero.power * 1.5);
-                monsData.currentHealth -= tempValue; //Later on, this line needs to be altered to accomodate dmgCalculator function (in utilities.js)
-				journalService.write("You dealt " + (Math.round(tempValue*10)/10) + " damage to " + monsData.name);
+                var damageValue = random (charHero.power * 0.5, charHero.power * 1.5); // First, get a number from a range of damage from 50% to 150% of original attack value.
+                damageValue = damageValue * charHero.attackType[charHero.selectedAttackID].powerRating; // Second, multiply the damage with power rating of the attack type.
+                damageValue = dmgCalculator(damageValue, charHero.attackType[charHero.selectedAttackID].damageType, monsData.armorType); // Finally, mitigate the damage based on enemy armor.
+                monsData.currentHealth -= damageValue;
+				journalService.write("You used \"" + charHero.attackType[charHero.selectedAttackID].attackName + "\". You dealt " + (Math.round(damageValue * 100) / 100) + " " + charHero.attackType[charHero.selectedAttackID].damageType + " damage to " + monsData.name);
 				
 				// Check if enemy is dead
 				if (monsData.currentHealth <= 0) {
@@ -174,13 +181,12 @@
                 //If the enemy is not dead, then the enemy will deal damage to player.
 				else {
                     
-                    tempValue = random (monsData.power * 0.5, monsData.power * 1.5);
-                    charHero.currentHealth -= tempValue;
-                    journalService.write("You received "  + (Math.round(tempValue*10)/10) + " damage from " + monsData.name);
+                    damageValue = random (monsData.power * 0.5, monsData.power * 1.5);
+                    charHero.currentHealth -= damageValue;
+                    journalService.write("You received "  + (Math.round(damageValue * 100) / 100) + " damage from " + monsData.name);
                     
                     // Check if player is dead
                     if (charHero.currentHealth <= 0) {
-                        //this.setGameMessage(1, "You barely escaped with your life from " + monsData.name);
                         journalService.write("You barely escaped with your life from " + monsData.name);
                         charHero.currentHealth = 1;
                         monsData.currentHealth = monsData.maxHealth;
@@ -188,7 +194,7 @@
 				}
                 
 			} else {
-				//charHero.currentStamina = 0;
+				journalService.write("You ran out of stamina. Calm down, champ.")
 			}
 			
 		};

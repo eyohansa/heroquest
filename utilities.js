@@ -15,7 +15,7 @@ var random = function (min, max) {
  * @return {Number}     The generated random Integer number.
  */
 var randomInt = function (min, max) {
-	return Math.floor( random(min, max));
+	return Math.floor(random(min, max));
 };
 
 
@@ -43,6 +43,12 @@ var mitigationTable = [{
     Piercing: 1.1,
     Blunt: 1.1,
     Magic: 0.6
+}, {
+    armorName: "None",
+    Slash: 1,
+    Piercing: 1,
+    Blunt: 1,
+    Magic: 1
 }];
 
 /**
@@ -59,7 +65,7 @@ var dmgCalculator = function (damageValue, attackType, armorType) {
     }
     
     for (i = 0; i < mitigationTable.length; i += 1) {
-        if (armorType === mitigationTable.armorName) {
+        if (armorType === mitigationTable[i].armorName) {
             return damageValue * mitigationTable[i][attackType]; //I'm not sure if this is valid or not
         }
     }

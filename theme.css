@@ -16,3 +16,7 @@ div#divJournal {
 .low{
 	color: red;
 }
+
+.attackIsSelected{
+    color: blue;
+}

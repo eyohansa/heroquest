@@ -19,8 +19,8 @@
 			<span>Level:</span> {{character.hero.level}}<br />
 			<span>Experience:</span> {{character.hero.experiencePoints}}<br />
 			<br>	<span>Power:</span>	{{character.hero.power}}
-			<br>	<span>Health:</span>	<span ng-class="{low:(character.hero.currentHealth/character.hero.maxHealth) < 0.25}"> {{character.hero.currentHealth}}/{{character.hero.maxHealth}}</span> (+{{character.hero.regen.health}})
-			<br>	<span>Stamina:</span>	<span ng-class="{low:(character.hero.currentStamina/character.hero.maxStamina) < 0.25}"> {{character.hero.currentStamina}}/{{character.hero.maxStamina}}</span> (+{{character.hero.regen.stamina}})
+			<br>	<span>Health:</span>	<span ng-class="{low:(character.hero.currentHealth/character.hero.maxHealth) < 0.25}"> {{character.hero.currentHealth|number:1}}/{{character.hero.maxHealth|number:1}}</span> (+{{character.hero.regen.health}})
+			<br>	<span>Stamina:</span>	<span ng-class="{low:(character.hero.currentStamina/character.hero.maxStamina) < 0.25}"> {{character.hero.currentStamina|number:1}}/{{character.hero.maxStamina|number:1}}</span> (+{{character.hero.regen.stamina}})
 			<div><span>Day:</span> {{character.day}}</div>
 			<div ng-show="character.hero.gold > 0"><span>Gold:</span> {{character.hero.gold}}</div> <br />
 		</div>
@@ -28,10 +28,17 @@
 		
 		<div id="divAction" ng-controller="ActionCtrl as action">
 			<div ng-controller="MonsterData as monster">
-				<div ng-repeat="mons in monster.monstah">
-					<button class='monster btn btn-default' ng-disabled="character.hero.stamina <= 0" ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}} [HP: {{mons.currentHealth}}/{{mons.maxHealth}}]</button>
+                
+                Choose your attack type:
+                <div ng-repeat="attack in character.hero.attackType">
+                    <button ng-click="character.selectAttack(attack.attackID)">{{attack.attackName}}</button>
+                    <input type="radio" name="attack" ng-model="testing" ng-change="character.selectAttack(attack.attackID)">{{attack.attackName}}
+                </div><br>
+                
+                <div ng-repeat="mons in monster.monstah">
+					<button class='monster btn btn-default' ng-disabled="character.hero.stamina <= 5" ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}} [HP: {{mons.currentHealth|number:1}}/{{mons.maxHealth|number:1}}]</button>
 				</div>
-				<div ng-class="action.gameMessage.style" ng-show="action.gameMessage.canShow">{{action.gameMessage.textMessage}}</div>
+				
 			</div>
 		</div>
 

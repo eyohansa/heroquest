@@ -30,6 +30,7 @@
 
 		this.hero = {
 			name: "Rat Hater",
+            nameLocked: false,
 			experiencePoints: 0,
 			level: 1,
 			gold: 0,
@@ -141,10 +142,10 @@
 		
 		this.battle = function (charHero, monsData) {
 			
-			//Check if hero stamina is depleted. If hero tries to attack with stamina at 0, nothing will happen.
             if(charHero.name.length > 20){
                 journalService.write(boldText("Your name is too long, I'll just give you weird names, how's that?"));
                 charHero.name = "Poopmeister";
+                charHero.nameLocked = true;
                 charHero.attackType[0].attackName = "Poop blade"
                 charHero.attackType[0].flavText = "Yup."
                 charHero.attackType[1].attackName = "Butt piercer"
@@ -155,12 +156,9 @@
                 charHero.attackType[3].flavText = "Well, stool."
                 charHero.attackType[4].attackName = "Magical sharts"
                 charHero.attackType[4].flavText = "Slightly better than regular sharts. I mean, it's magical after all."
-            }
-            
-			if(charHero.selectedAttackID === -1){
+            } else if(charHero.selectedAttackID === -1){
                 journalService.write("Yo, select your attack type first.");
-            }
-            else if (charHero.currentStamina - charHero.attackType[charHero.selectedAttackID].staminaUsage > 0) {
+            } else if (charHero.currentStamina - charHero.attackType[charHero.selectedAttackID].staminaUsage > 0) {
                 
                 //Use 1 stamina for attack
                 charHero.currentStamina -= charHero.attackType[charHero.selectedAttackID].staminaUsage;

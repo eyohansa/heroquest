@@ -16,7 +16,8 @@
 	<div ng-controller="CharacterCtrl as character" class='container'>
 	
 		<div id='stats'>
-			<span>Name:</span> <input ng-model="character.hero.name" type="text" /><br />
+			<span>Name:</span> <input ng-model="character.hero.name" type="text" ng-disabled="character.hero.nameLocked"/> <br />
+            <small><small>Do not exceed 20 letters, please.</small></small><br /><br />
 			<span>Level:</span> {{character.hero.level}}<br />
 			<span>Experience:</span> {{character.hero.experiencePoints}}<br />
 			<br>	<span>Power:</span>	{{character.hero.power}}

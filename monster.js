@@ -7,6 +7,7 @@
 			ID: 0,
 			name: "Sewer Rat",
 			levelReq: 1,
+            flavPlayerLoseMessage: "",
 
 			currentHealth: 10,
 			maxHealth: 10,
@@ -25,6 +26,7 @@
 			ID: 1,
 			name: "Rat",
 			levelReq: 3,
+            flavPlayerLoseMessage: "",
 
 			currentHealth: 25,
 			maxHealth: 25,
@@ -35,7 +37,7 @@
 			
             armorType: "None",
 
-			expDrop: 2,
+			expDrop: 3,
 			goldDrop: 2
 		};
 		
@@ -53,7 +55,7 @@
 			
             armorType: "None",
 
-			expDrop: 4,
+			expDrop: 5,
 			goldDrop: 5
 		};
 		
@@ -62,6 +64,7 @@
 			ID: 3,
 			name: "Bad Ratz with armor (what?)",
 			levelReq: 10,
+            flavPlayerLoseMessage: "",
 
 			currentHealth: 150,
 			maxHealth: 150,
@@ -71,15 +74,16 @@
 			
             armorType: "LightArmor",
 
-			expDrop: 10,
-			goldDrop: 10
+			expDrop: 8,
+			goldDrop: 8
 		};
 		
 
-		this.monstah[3] = {
-			ID: 3,
+		this.monstah[4] = {
+			ID: 4,
 			name: "Magical Mouse",
 			levelReq: 12,
+            flavPlayerLoseMessage: "",
 
 			currentHealth: 100,
 			maxHealth: 100,
@@ -95,5 +99,9 @@
 		
 
 	});
+    
+    var addMonster = function (monsname, monslevelReq, monsflavPlayerLoseMessage, monsmaxHealth, monspower, monsstamina, monsarmorType, monsexpDrop, monsgoldDrop) {
+        //this.monstah.push({ID: this.monstah.length, name: monsname, levelReq: monslevelReq, flavPlayerLoseMessage, monsflavPlayerLoseMessage, currentHealth: monsmaxHealth, maxHealth: monsmaxHealth, power: monspower, stamina: monsstamina, armorType: monsarmorType, expDrop: monsexpDrop, goldDrop: monsgoldDrop});
+    };
 	
 })(window.angular);

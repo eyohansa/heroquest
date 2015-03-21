@@ -31,6 +31,7 @@
 		this.hero = {
 			name: "Rat Hater",
             nameLocked: false,
+            unconscious: false,
 			experiencePoints: 0,
 			level: 1,
 			gold: 0,
@@ -116,6 +117,11 @@
 			// Checks for overflow in HP due to regen
 			if (injectTemp.hero.currentHealth >= injectTemp.hero.maxHealth) {
 				injectTemp.hero.currentHealth = injectTemp.hero.maxHealth;
+                if (injectTemp.hero.unconscious === true){
+                    injectTemp.hero.unconscious = false; // Hero can move again.
+                    journalService.write("Hero can move again now. Now be careful next time, you hear?");
+                    console.log
+                }
 			}
 			
 			// Checks for overflow in stamina due to regen
@@ -204,8 +210,9 @@
                     
                     // Check if player is dead
                     if (charHero.currentHealth <= 0) {
-                        journalService.write(colorText(strongText("You barely escaped with your life from " + monsData.name)), "red");
-                        charHero.currentHealth = 1;
+                        journalService.write(colorText(strongText("You got knocked unconscious by " + monsData.name + ". Good job, player."), "red") + " Now sit down and wait until he/she/it/thing fully recovers.");
+                        charHero.currentHealth = 0;
+                        charHero.unconscious = true;
                         monsData.currentHealth = monsData.maxHealth;
                     }
 				}

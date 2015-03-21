@@ -37,7 +37,7 @@
                 </div><br>
                 
                 <div ng-repeat="mons in monster.monstah">
-					<button class='monster btn btn-default' ng-disabled="character.hero.stamina <= 5" ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}} [HP: {{mons.currentHealth|number:1}}/{{mons.maxHealth|number:1}}]</button>
+					<button class='monster btn btn-default' ng-disabled="character.hero.unconscious" ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}} [HP: {{mons.currentHealth|number:1}}/{{mons.maxHealth|number:1}}]</button>
 				</div>
 				
 			</div>

@@ -18,5 +18,5 @@ div#divJournal {
 }
 
 .attackIsSelected{
-    color: blue;
+   text-decoration: underline;
 }

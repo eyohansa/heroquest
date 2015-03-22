@@ -98,41 +98,50 @@
             }
 		};
 		
-		var injectTemp = this;
+		var injectHero = this;
 
 		// Hero's health and stamina regen. Regen is set at every second.
 		var TIME_SECOND_CONSTANT = 1000; //1 second equal to 1000
-		var regen = $interval(function () {
+        var GAME_TICK_CONST = 0.5; // 1/GAME_TICK = number of times the game updates
+        
+        // Interval function for hero's health and stamina regeneration, and also for incremental part of game
+		var gameTick = $interval(function () {
 
+            /////// HEALTH AND STAMINA SECTION ///////
 			// Add HP if HP is less than max HP
-			if (injectTemp.hero.currentHealth < injectTemp.hero.maxHealth) {
-				injectTemp.hero.currentHealth += injectTemp.hero.regen.health;
+			if (injectHero.hero.currentHealth < injectHero.hero.maxHealth) {
+				injectHero.hero.currentHealth += injectHero.hero.regen.health * GAME_TICK_CONST;
 			}
 
 			// Add stamina if stamina is less than max stamina
-			if (injectTemp.hero.currentStamina < injectTemp.hero.maxStamina) {
-				injectTemp.hero.currentStamina += injectTemp.hero.regen.stamina;
+			if (injectHero.hero.currentStamina < injectHero.hero.maxStamina) {
+				injectHero.hero.currentStamina += injectHero.hero.regen.stamina * GAME_TICK_CONST;
 			}
 			
 			// Checks for overflow in HP due to regen
-			if (injectTemp.hero.currentHealth >= injectTemp.hero.maxHealth) {
-				injectTemp.hero.currentHealth = injectTemp.hero.maxHealth;
-                if (injectTemp.hero.unconscious === true){
-                    injectTemp.hero.unconscious = false; // Hero can move again.
+			if (injectHero.hero.currentHealth >= injectHero.hero.maxHealth) {
+				injectHero.hero.currentHealth = injectHero.hero.maxHealth;
+                if (injectHero.hero.unconscious === true){
+                    injectHero.hero.unconscious = false; // Hero can move again.
                     journalService.write("Hero can move again now. Now be careful next time, you hear?");
                     console.log
                 }
 			}
 			
 			// Checks for overflow in stamina due to regen
-			if (injectTemp.hero.currentStamina >= injectTemp.hero.maxStamina) {
-				injectTemp.hero.currentStamina = injectTemp.hero.maxStamina;
+			if (injectHero.hero.currentStamina >= injectHero.hero.maxStamina) {
+				injectHero.hero.currentStamina = injectHero.hero.maxStamina;
 			}
-		}, TIME_SECOND_CONSTANT);
+            
+            /////// INCREMENTAL SECTION ///////
+            
+            
+		}, GAME_TICK_CONST * TIME_SECOND_CONSTANT);
 		
+        // Interval function for increasing number of day passed
 		var daybreak = $interval(function () {
 			// New day every 10s.
-			injectTemp.day += 1;
+			injectHero.day += 1;
 		}, 10 * TIME_SECOND_CONSTANT);
 	}]);
 

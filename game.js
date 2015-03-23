@@ -50,7 +50,7 @@ $(document).ready(function() {
         }
     });
         
-	game.controller("CharacterCtrl", ['$interval', 'journalService', function ($interval, journalService) {
+	game.controller("CharacterCtrl", ['$interval', '$document', 'journalService', function ($interval, $document, journalService) {
 		this.day = 0;
 
 		var defaultHero = {
@@ -193,6 +193,10 @@ $(document).ready(function() {
 			this.day = journalService.load('heroquest.day');
 			journalService.write("Loaded.");
 		}
+
+		$document.ready(function () {
+			injectHero.load();
+		});
 
 		this.reset = function() {
 			this.hero = defaultHero;

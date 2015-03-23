@@ -15,9 +15,9 @@
 <body ng-app='HeroicAdventure'>
 	<div ng-controller="CharacterCtrl as character" class='container'>
 		<div id='menu'>
-			<span data-toggle="tooltip" data-placement="bottom" data-original-title="Save your game." ng-click="character.save()">Save</span>
-			<span data-toggle="tooltip" data-placement="bottom" data-original-title="Load your game." ng-click="character.load()">Load</span>
-			<span data-toggle="tooltip" data-placement="bottom" data-original-title="Reset your game." ng-click="character.reset()">Reset</span>
+			<a href data-toggle="tooltip" data-placement="bottom" data-original-title="Save your game." ng-click="character.save()">Save</a>
+			<a href data-toggle="tooltip" data-placement="bottom" data-original-title="Load your game." ng-click="character.load()">Load</a>
+			<a href data-toggle="tooltip" data-placement="bottom" data-original-title="Reset your game." ng-click="character.reset()">Reset</a>
 		</div>
 		<div id='stats'>
 			<span>Name:</span> <input ng-model="character.hero.name" type="text" ng-disabled="character.hero.nameLocked"/> <br />
@@ -35,14 +35,20 @@
         
         <div id="gameSection" ng-controller="ViewCtrl as view">
             
-            <div id="viewMenu">
+            <!--<div id="viewMenu">
                 <span ng-repeat="menuOption in view.menu">
                     <button ng-click="view.switchActiveView(menuOption)">{{menuOption}}</button>
                 </span>
-            </div>
+            </div>-->
+
+            
+        	<ul class="nav nav-tabs">
+        		<li role="presentation" ng-repeat="menuItem in view.menu" ng-class="{active:view.activeView == menuItem}"><a href ng-click="view.switchActiveView(menuItem)">{{menuItem}}</a></li>
+        	</ul>
+            
             
             <!-- Battle Section -->
-            <div id="divAction" ng-controller="ActionCtrl as action" ng-show="view.activeView == 'Battle'">
+            <div class="panel" id="divAction" ng-controller="ActionCtrl as action" ng-show="view.activeView == 'Battle'">
                 <div ng-controller="MonsterData as monster">
 
                     Choose your attack type:
@@ -58,27 +64,27 @@
             </div>
 
             <!-- Building Section -->
-            <div id="divBuilding" ng-show="view.activeView == 'Building'">
+            <div class="panel" id="divBuilding" ng-show="view.activeView == 'Building'">
                 Building SECTION!
             </div>
 
             <!-- Item Shop Section -->
-            <div id="divItemShop" ng-show="view.activeView == 'Item Shop'">
+            <div class="panel" id="divItemShop" ng-show="view.activeView == 'Item Shop'">
                 Item Shop SECTION!
             </div>
 
             <!-- Armory Section -->
-            <div id="divArmory" ng-show="view.activeView == 'Armory'">
+            <div class="panel" id="divArmory" ng-show="view.activeView == 'Armory'">
                 Armory SECTION!
             </div>
 
             <!-- Explore Section -->
-            <div id="divExplore" ng-show="view.activeView == 'Explore'">
+            <div class="panel" id="divExplore" ng-show="view.activeView == 'Explore'">
                 Explore SECTION!
             </div>
 
             <!-- Change Equipment Section -->
-            <div id="divChangeEquipment" ng-show="view.activeView == 'Equipment'">
+            <div class="panel" id="divChangeEquipment" ng-show="view.activeView == 'Equipment'">
                 Change Equipment SECTION!
             </div>
         </div>

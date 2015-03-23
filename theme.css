@@ -28,3 +28,23 @@ div#divJournal {
 .attackIsSelected{
    text-decoration: underline;
 }
+
+.Slash{
+    color: red;
+}
+
+.Piercing{
+    color: brown;
+}
+
+.Blunt{
+    color: blue;
+}
+
+.Neutral{
+    color: gray;
+}
+
+.Magic{
+    color: purple;
+}

@@ -72,3 +72,20 @@ var dmgCalculator = function (damageValue, attackType, armorType) {
     
     
 };
+
+/**
+ * Function for testing whether player has enough gold to buy building/item or not.
+ * If the object purchased does not have price ratio and unrelated to incrementals, set priceRatio to 1.
+ * @param  {Number} goldAmount          Hero's amount of gold.
+ * @param  {Number} basePrice           Base price of the building/item.
+ * @param  {Number} priceRatio          Price ratio of the building/item. (set to 1 if the price does not increase based on owned building/item)
+ * @param  {Number} numCurrentlyOwned   Number of currently owned building/item. (unnecessary if building/item price is not incremental, set to 0 in that case to optimize time)
+ * @return {Boolean}                    True if player indeed can buy the building/item. False otherwise.
+ */
+this.canBuy = function (goldAmount, basePrice, priceRatio, numCurrentlyOwned) {
+    if (goldAmount >= (basePrice * Math.pow(priceRatio, numCurrentlyOwned))) {
+        return true;
+    } else {
+        return false;
+    }
+};

@@ -23,24 +23,33 @@ $(document).ready(function() {
 		 * @param  {String} key    Item key of local storage where the object will be stored.
 		 * @param  {Object} object Object to be saved.
 		 */
-		journal.save = function(key, object) {
+		journal.save = function (key, object) {
 			var objectJson = JSON.stringify(object);
 			localStorage.setItem(key, objectJson);
-		}
+		};
 
 		/**
 		 * Load the state of the object from local storage with specified key.
 		 * @param  {String} key Item key of local storage where the object is stored.
 		 * @return {Object}     The object stored within local storage.
 		 */
-		journal.load = function(key) {
+		journal.load = function (key) {
 			var item = localStorage.getItem(key);
 			return JSON.parse(item);
-		}
+		};
 
 		return journal;
 	});
-
+    
+    game.controller('ViewCtrl', function () {
+        this.activeView; //default value
+        this.menu = ["Equipment", "Battle", "Building", "Item Shop", "Armory", "Explore"];
+        
+        this.switchActiveView = function (viewName) {
+            this.activeView = viewName;
+        }
+    });
+        
 	game.controller("CharacterCtrl", ['$interval', 'journalService', function ($interval, journalService) {
 		this.day = 0;
 
@@ -62,54 +71,72 @@ $(document).ready(function() {
 			},
             selectedAttackID: -1,
             
+            itemInventory: [{
+                itemName: "Copper",
+                itemNumber: 0
+            }, {
+                itemName: "Iron",
+                itemNumber: 0
+            }, {
+                itemName: "Silver",
+                itemNumber: 0
+            }, {
+                itemName: "Potion",
+                itemNumber: 0
+            }],
+            
             // Hero's Attack Types (can be added later). For now, damage types are Slash, Pierce, Blunt, Magic and Neutral)
-            // Additionally, monster now will have their own armor type. Somewhat similar to Warcraft
-            // Armor types for now are: LightArmor, HeavyArmor, magicArmor
-            // Probably time to make buttons to switch between attackTypes.
             // Also, skills can be put in here, if necessary.
             attackType: [{
-                attackID:0,
+                attackID: 0,
                 attackName: "Slice and d6 'em",
                 damageType: "Slash",
                 flavText: "",
                 staminaUsage: 1,
                 powerRating: 1
-            },
-            {
-                attackID:1,
+            }, {
+                attackID: 1,
                 attackName: "Stabbity stab 'em",
                 damageType: "Piercing",
                 flavText: "",
                 staminaUsage: 1,
                 powerRating: 1
-            },
-            {
-                attackID:2,
+            }, {
+                attackID: 2,
                 attackName: "Bash with something \"blunt\" ",
                 damageType: "Blunt",
                 flavText: "You know what I mean *nudge*. You know, with your head, or arm, or legs.",
                 staminaUsage: 1.5,
                 powerRating: 1.25
-            },
-            {
-                attackID:3,
+            }, {
+                attackID: 3,
                 attackName: "Some kind of \"Attack\"",
                 damageType: "Neutral",
                 flavText: "If this attack name isn't shady enough, I don't know what else to write to make it \"neutral\"",
                 staminaUsage: 0.5,
                 powerRating: 0.5
-            },
-            {
-                attackID:4,
+            }, {
+                attackID: 4,
                 attackName: "Something like magic missile",
                 damageType: "Magic",
                 flavText: "Just because magic missile is overused. And yet, I can't get away from that name",
                 staminaUsage: 2,
                 powerRating: 1.5
-            }
-            ],
+            }],
             
-            selectAttack: function() {
+            getItemIndex: function (itemName) {
+                
+            },
+            
+            addItemToInventory: function (itemName, itemNumber) {
+                
+            },
+            
+            reduceItemFromInventory: function (itemName, itemNumber) {
+                
+            },
+            
+            selectAttack: function () {
                 journalService.write(this.name + " chosen " + attackTypeColorText(this.attackType[this.selectedAttackID].attackName, this.attackType[this.selectedAttackID].damageType));
             }
 		};

@@ -32,21 +32,57 @@
 		</div>
 		<br>
 		
-		<div id="divAction" ng-controller="ActionCtrl as action">
-			<div ng-controller="MonsterData as monster">
-                
-                Choose your attack type:
-                <div ng-repeat="attack in character.hero.attackType">
-                    <input type="radio" title="{{attack.flavText}}" ng-model="character.hero.selectedAttackID" ng-change="character.hero.selectAttack()" ng-value="attack.attackID"><b><span title="{{attack.flavText}}" ng-class="{attackIsSelected:character.hero.selectedAttackID === attack.attackID}">{{attack.attackName}}</b>: Cost {{attack.staminaUsage}} stamina. Deals {{attack.damageType}} damage.</span>
-                </div><br>
-                
-                <div ng-repeat="mons in monster.monstah">
-					<button class='monster btn btn-default' ng-disabled="character.hero.unconscious" ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}} [HP: {{mons.currentHealth|number:1}}/{{mons.maxHealth|number:1}}]</button>
-				</div>
-				
-			</div>
-		</div>
+        
+        <div id="gameSection" ng-controller="ViewCtrl as view">
+            
+            <div id="viewMenu">
+                <span ng-repeat="menuOption in view.menu">
+                    <button ng-click="view.switchActiveView(menuOption)">{{menuOption}}</button>
+                </span>
+            </div>
+            
+            <!-- Battle Section -->
+            <div id="divAction" ng-controller="ActionCtrl as action" ng-show="view.activeView == 'Battle'">
+                <div ng-controller="MonsterData as monster">
 
+                    Choose your attack type:
+                    <div ng-repeat="attack in character.hero.attackType">
+                        <input type="radio" title="{{attack.flavText}}" ng-model="character.hero.selectedAttackID" ng-change="character.hero.selectAttack()" ng-value="attack.attackID"><b><span title="{{attack.flavText}}" ng-class="{attackIsSelected:character.hero.selectedAttackID === attack.attackID}"><span ng-class="attack.damageType">{{attack.attackName}}</span></b>: Cost {{attack.staminaUsage}} stamina. Deals <span ng-class="attack.damageType">{{attack.damageType}}</span> damage.</span>
+                    </div><br>
+
+                    <div ng-repeat="mons in monster.monstah">
+                        <button class='monster btn btn-default' ng-disabled="character.hero.unconscious" ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}} [HP: {{mons.currentHealth|number:1}}/{{mons.maxHealth|number:1}}]</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Building Section -->
+            <div id="divBuilding" ng-show="view.activeView == 'Building'">
+                Building SECTION!
+            </div>
+
+            <!-- Item Shop Section -->
+            <div id="divItemShop" ng-show="view.activeView == 'Item Shop'">
+                Item Shop SECTION!
+            </div>
+
+            <!-- Armory Section -->
+            <div id="divArmory" ng-show="view.activeView == 'Armory'">
+                Armory SECTION!
+            </div>
+
+            <!-- Explore Section -->
+            <div id="divExplore" ng-show="view.activeView == 'Explore'">
+                Explore SECTION!
+            </div>
+
+            <!-- Change Equipment Section -->
+            <div id="divChangeEquipment" ng-show="view.activeView == 'Equipment'">
+                Change Equipment SECTION!
+            </div>
+        </div>
+        
 		<div id="divJournal"></div>
         
 	</div>

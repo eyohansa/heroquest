@@ -42,7 +42,7 @@ $(document).ready(function() {
 	});
     
     game.controller('ViewCtrl', function () {
-        this.activeView; //default value
+        this.activeView = "Battle"; //default value
         this.menu = ["Equipment", "Battle", "Building", "Item Shop", "Armory", "Explore"];
         
         this.switchActiveView = function (viewName) {

@@ -1,3 +1,7 @@
+$(document).ready(function() {
+	$('[data-toggle="tooltip"]').tooltip();
+});
+
 (function (angular) {
 	var game = angular.module("HeroicAdventure", ['Monsters']);
 
@@ -138,7 +142,6 @@
                 if (injectHero.hero.unconscious === true){
                     injectHero.hero.unconscious = false; // Hero can move again.
                     journalService.write("Hero can move again now. Now be careful next time, you hear?");
-                    console.log
                 }
 			}
 			
@@ -154,10 +157,14 @@
 		
 		this.save = function() {
 			journalService.save('heroquest.hero', this.hero);
+			journalService.save('heroquest.day', this.day);
+			journalService.write("Saved.");
 		}
 
 		this.load = function() {
 			this.hero = journalService.load('heroquest.hero');
+			this.day = journalService.load('heroquest.day');
+			journalService.write("Loaded.");
 		}
 
 		this.reset = function() {

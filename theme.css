@@ -1,3 +1,11 @@
+div#menu {
+	cursor: default;
+}
+
+div#menu span {
+	margin-right: 8px;
+}
+
 div#stats {
 	float: left;
 	width: 300px;

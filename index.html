@@ -15,9 +15,9 @@
 <body ng-app='HeroicAdventure'>
 	<div ng-controller="CharacterCtrl as character" class='container'>
 		<div id='menu'>
-			<span ng-click="character.save()">Save</span>
-			<span ng-click="character.load()">Load</span>
-			<span ng-click="character.reset()">Reset</span>
+			<span data-toggle="tooltip" data-placement="bottom" data-original-title="Save your game." ng-click="character.save()">Save</span>
+			<span data-toggle="tooltip" data-placement="bottom" data-original-title="Load your game." ng-click="character.load()">Load</span>
+			<span data-toggle="tooltip" data-placement="bottom" data-original-title="Reset your game." ng-click="character.reset()">Reset</span>
 		</div>
 		<div id='stats'>
 			<span>Name:</span> <input ng-model="character.hero.name" type="text" ng-disabled="character.hero.nameLocked"/> <br />

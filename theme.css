@@ -1,10 +1,18 @@
 div#menu {
 	cursor: default;
+	background: black;
+	margin-bottom: 8px;
+	padding: 8px;
 }
 
 div#menu a {
 	text-decoration: none;
 	margin-right: 8px;
+	color: gray;
+}
+
+div#menu a:hover {
+	color: white;
 }
 
 #gameSection {

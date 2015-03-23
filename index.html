@@ -14,7 +14,11 @@
 </head>
 <body ng-app='HeroicAdventure'>
 	<div ng-controller="CharacterCtrl as character" class='container'>
-	
+		<div id='menu'>
+			<span ng-click="character.save()">Save</span>
+			<span ng-click="character.load()">Load</span>
+			<span ng-click="character.reset()">Reset</span>
+		</div>
 		<div id='stats'>
 			<span>Name:</span> <input ng-model="character.hero.name" type="text" ng-disabled="character.hero.nameLocked"/> <br />
             <small><small>Do not exceed 20 letters, please.</small></small><br /><br />

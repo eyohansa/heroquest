@@ -14,13 +14,25 @@
 			$("#divJournal").html(entryQueue);
 		};
 
-		journal.save = function () {
-			// Game saving will be performed here.
-		};
+		/**
+		 * Save the state of the object to local storage with specified key.
+		 * @param  {String} key    Item key of local storage where the object will be stored.
+		 * @param  {Object} object Object to be saved.
+		 */
+		journal.save = function(key, object) {
+			var objectJson = JSON.stringify(object);
+			localStorage.setItem(key, objectJson);
+		}
 
-		journal.load = function () {
-			// Game loading will be performed here.
-		};
+		/**
+		 * Load the state of the object from local storage with specified key.
+		 * @param  {String} key Item key of local storage where the object is stored.
+		 * @return {Object}     The object stored within local storage.
+		 */
+		journal.load = function(key) {
+			var item = localStorage.getItem(key);
+			return JSON.parse(item);
+		}
 
 		return journal;
 	});
@@ -28,7 +40,7 @@
 	game.controller("CharacterCtrl", ['$interval', 'journalService', function ($interval, journalService) {
 		this.day = 0;
 
-		this.hero = {
+		var defaultHero = {
 			name: "Rat Hater",
             nameLocked: false,
             unconscious: false,
@@ -97,6 +109,8 @@
                 journalService.write(this.name + " chosen " + attackTypeColorText(this.attackType[this.selectedAttackID].attackName, this.attackType[this.selectedAttackID].damageType));
             }
 		};
+
+		this.hero = defaultHero;
 		
 		var injectHero = this;
 
@@ -138,6 +152,19 @@
             
 		}, GAME_TICK_CONST * TIME_SECOND_CONSTANT);
 		
+		this.save = function() {
+			journalService.save('heroquest.hero', this.hero);
+		}
+
+		this.load = function() {
+			this.hero = journalService.load('heroquest.hero');
+		}
+
+		this.reset = function() {
+			this.hero = defaultHero;
+		}
+
+
         // Interval function for increasing number of day passed
 		var daybreak = $interval(function () {
 			// New day every 10s.

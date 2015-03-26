@@ -6,9 +6,7 @@ $(document).ready(function() {
 	var game = angular.module("HeroicAdventure", ['Monsters', 'Buildings']);
 
 	game.factory('journalService', function () {
-		var journal = {};
-		var entryQueue = [];
-		var queueCap = 10;
+		var journal = {}, entryQueue = [], queueCap = 10, injectHero = this;
 
 		journal.write = function (message) {
 			if (entryQueue.push(message + '<br />') > queueCap) {
@@ -47,7 +45,7 @@ $(document).ready(function() {
         
         this.switchActiveView = function (viewName) {
             this.activeView = viewName;
-        }
+        };
     });
         
 	game.controller("CharacterCtrl", ['$interval', '$document', 'journalService', function ($interval, $document, journalService) {
@@ -72,6 +70,9 @@ $(document).ready(function() {
             selectedAttackID: -1,
             
             itemInventory: [{
+                itemName: "Rock",
+                itemNumber: 0
+            }, {
                 itemName: "Copper",
                 itemNumber: 0
             }, {
@@ -125,7 +126,15 @@ $(document).ready(function() {
             }],
             
             getItemIndex: function (itemName) {
+                var i;
                 
+                for (i = 0; i < this.itemInventory.length; i += 1) {
+                    if (itemName === this.itemInventory[i].itemName) {
+                        return i;
+                    }
+                }
+                
+                return 0; // If no match can be found, return 0
             },
             
             addItemToInventory: function (itemName, itemNumber) {
@@ -142,7 +151,6 @@ $(document).ready(function() {
 		};
 
 		this.hero = defaultHero;
-		
 		var injectHero = this;
 
 		// Hero's health and stamina regen. Regen is set at every second.
@@ -177,9 +185,6 @@ $(document).ready(function() {
 				injectHero.hero.currentStamina = injectHero.hero.maxStamina;
 			}
             
-            /////// INCREMENTAL SECTION ///////
-            
-            
 		}, GAME_TICK_CONST * TIME_SECOND_CONSTANT);
 		
 		this.save = function() {
@@ -195,7 +200,7 @@ $(document).ready(function() {
 		}
 
 		$document.ready(function () {
-			injectHero.load();
+			//injectHero.load();
 		});
 
 		this.reset = function() {

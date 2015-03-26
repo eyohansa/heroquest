@@ -1,16 +1,29 @@
+// For surpressing JSLint error message
+/*global canBuy */
+/*global random */
+/*global manualExp */
+
+
 (function (angular) {
+    "use strict"; // To surpress JSLint error message
 	var buildingData = angular.module("Buildings", []);
 
-	buildingData.controller("BuildingCtrl", function () {
+	buildingData.controller("BuildingCtrl", ['$interval', function ($interval) {
         
         this.calculatePrice = function (basePrice, priceRatio, numOwnedProperties) {
             return basePrice * manualExp(priceRatio, numOwnedProperties);
-        }
+        };
         
         this.miningTown = {
+            //Temporary Storage
+            rock:0,
+            copper:0,
+            silver:0,
+            gold:0,
+            
             activeMiners: 0,
             totalMiners: 0,
-            baseMinersPriceRatio: 1.25,
+            baseMinersPriceRatio: 1.10,
             baseMinersPrice: 1,
             
             miningPlace: [{
@@ -20,7 +33,7 @@
                 numOwned: 0,
                 numMiner: 0,
                 basePrice: 10,
-                priceRatio: 1.25,
+                priceRatio: 1.15,
                 baseGoldRate: 0.05,
                 itemList: ["rock", "copper", "gold"],
                 CDFpercentage: [85, 95, 100] //This is probability in CDF form. Basically, the percentage of getting rock is 85%, copper 10% and gold 5%.
@@ -32,7 +45,7 @@
                 numOwned: 0,
                 numMiner: 0,
                 basePrice: 50,
-                priceRatio: 1.25,
+                priceRatio: 1.15,
                 baseGoldRate: 0.1,
                 itemList: ["rock", "copper", "silver", "gold"],
                 CDFpercentage: [50, 75, 90, 100]
@@ -43,7 +56,7 @@
                 numOwned: 0,
                 numMiner: 0,
                 basePrice: 500,
-                priceRatio: 1.25,
+                priceRatio: 1.15,
                 baseGoldRate: 0.2,
                 itemList: ["copper", "silver", "gold"],
                 CDFpercentage: [50, 80, 100]
@@ -55,15 +68,14 @@
                 numMiner: 0,
                 baseGoldRate: 0.4,
                 basePrice: 10000,
-                priceRatio: 1.25,
+                priceRatio: 1.15,
                 itemList: ["silver", "gold"],
                 CDFpercentage: [60, 100]
             }],
             
             // Function to call for mining operation. This function will return an array of retreived items & gold.
             mines: function () {
-                var miningAttempt, RNG, i, j, k, acquiredGold = 0;
-                var acquiredItems = [];
+                var miningAttempt, RNG, i, j, k, acquiredGold = 0, acquiredItems = [];
                 for (i = 0; i < this.miningPlace.length; i += 1) {
 
                     // Determine number of mining attempts: checks if number of miners are too many or too little based on number of owned mines.
@@ -75,13 +87,15 @@
 
                     // Roll the RNG
                     for (j = 0; j < miningAttempt; j += 1) {
-                        RNG = random(0, 1);
+                        RNG = randomInt(1, 100);
                         for (k = 0; k < this.miningPlace[i].CDFpercentage.length; k += 1) {
                             //Check what item is received from mining based on RNG roll. however, for gold acquirement, the function is a bit different.
                             if (RNG < this.miningPlace[i].CDFpercentage[k] && this.miningPlace[i].itemList[k] !== "gold") {
                                 acquiredItems.push(this.miningPlace[i].itemList[k]);
+                                break;
                             } else if (this.miningPlace[i].itemList[k] === "gold") {
                                 acquiredGold += this.miningPlace[i].baseGoldRate;
+                                break;
                             }
 
                         }
@@ -105,16 +119,16 @@
             },
             
             // For buying a mine.
-            buyMine: function (goldAmount, mineName) {
+            buyMine: function (charHero, mineName) {
                 var mineIndex = this.findMineIndex(mineName);
-                if (canBuy(goldAmount, this.miningPlace[mineIndex].basePrice, this.miningPlace[mineIndex].priceRatio, this.miningPlace[mineIndex].numOwned)) {
+                if (canBuy(charHero.gold, this.miningPlace[mineIndex].basePrice, this.miningPlace[mineIndex].priceRatio, this.miningPlace[mineIndex].numOwned)) {
                     this.miningPlace[mineIndex].numOwned += 1;
-                    goldAmount -= this.miningPlace[mineIndex].basePrice * Math.pow(this.miningPlace[mineIndex].priceRatio, this.miningPlace[mineIndex].numOwned);
+                    charHero.gold -= this.miningPlace[mineIndex].basePrice * Math.pow(this.miningPlace[mineIndex].priceRatio, this.miningPlace[mineIndex].numOwned);
                 }
             },
 
             // For removing a miner from a mine.
-            reduceMiners: function (mineName) {
+            removeMiners: function (mineName) {
                 this.miningPlace[this.findMineIndex(mineName)].numMiner -= 1;
                 this.activeMiners -= 1;
             },
@@ -126,23 +140,52 @@
             },
 
             // For hiring miner.
-            buyMiners: function (goldAmount) {
-                if (canBuy(goldAmount, this.baseMinersPrice, this.baseMinersPriceRatio, this.totalMiners)) {
+            buyMiners: function (charHero) {
+                if (canBuy(charHero.gold, this.baseMinersPrice, this.baseMinersPriceRatio, this.totalMiners)) {
                     this.totalMiners += 1;
-                    goldAmount -= this.baseMinersPrice * Math.pow(this.baseMinersPrice, this.totalMiners);
+                    charHero.gold -= this.baseMinersPrice * Math.pow(this.baseMinersPrice, this.totalMiners);
                 }
             },
             
             // For firing miner.
-            sellMiners: function (goldAmount) {
+            sellMiners: function (charHero) {
                 this.totalMiners -= 1;
-                goldAmount += this.baseMinersPrice * Math.pow(this.baseMinersPrice, this.totalMiners - 1);
+                charHero.gold += this.baseMinersPrice * Math.pow(this.baseMinersPrice, this.totalMiners - 1);
                 if (this.activeMiners === this.totalMiners) {
                     //REMOVE RANDOM MINERS
                 }
+            },
+            
+            collectMine: function (charHero) {
+                charHero.itemInventory[0].itemNumber += this.rock;
+                charHero.itemInventory[charHero.getItemIndex("Copper")].itemNumber += this.copper;
+                charHero.itemInventory[charHero.getItemIndex("Silver")].itemNumber += this.silver;
+                charHero.gold += this.gold;
+                
+                this.rock = 0;
+                this.copper = 0;
+                this.silver = 0;
+                this.gold = 0;
             }
         };
+        
+        var injectMine = this;
+        var miningTick = $interval(function (charHero) {
+            var result = injectMine.miningTown.mines(), i = 0;
+            console.log(result);
+            for (i = 0; i < result.length; i += 1) {
+                if (result[i] === "rock") {
+                    injectMine.miningTown.rock += 1;
+                } else if (result[i] === "copper") {
+                    injectMine.miningTown.copper += 1;
+                } else if (result[i] === "silver") {
+                    injectMine.miningTown.silver += 1;
+                } else {
+                    injectMine.miningTown.gold += result[i];
+                }
+            }
+        }, 1000);
 
-	});
+	}]);
     	
 })(window.angular);

@@ -3,7 +3,7 @@ $(document).ready(function() {
 });
 
 (function (angular) {
-	var game = angular.module("HeroicAdventure", ['Monsters']);
+	var game = angular.module("HeroicAdventure", ['Monsters', 'Buildings']);
 
 	game.factory('journalService', function () {
 		var journal = {};

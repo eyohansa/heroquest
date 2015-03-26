@@ -1,7 +1,11 @@
 (function (angular) {
 	var buildingData = angular.module("Buildings", []);
 
-	buildingData.controller("Building", function () {
+	buildingData.controller("BuildingCtrl", function () {
+        
+        this.calculatePrice = function (basePrice, priceRatio, numOwnedProperties) {
+            return basePrice * manualExp(priceRatio, numOwnedProperties);
+        }
         
         this.miningTown = {
             activeMiners: 0,
@@ -122,7 +126,7 @@
             },
 
             // For hiring miner.
-            hireMiners: function (goldAmount) {
+            buyMiners: function (goldAmount) {
                 if (canBuy(goldAmount, this.baseMinersPrice, this.baseMinersPriceRatio, this.totalMiners)) {
                     this.totalMiners += 1;
                     goldAmount -= this.baseMinersPrice * Math.pow(this.baseMinersPrice, this.totalMiners);
@@ -130,7 +134,7 @@
             },
             
             // For firing miner.
-            fireMiners: function (goldAmount) {
+            sellMiners: function (goldAmount) {
                 this.totalMiners -= 1;
                 goldAmount += this.baseMinersPrice * Math.pow(this.baseMinersPrice, this.totalMiners - 1);
                 if (this.activeMiners === this.totalMiners) {

@@ -73,6 +73,20 @@ var dmgCalculator = function (damageValue, attackType, armorType) {
     
 };
 
+// Reinvent the wheel: that is, the Math.pow function.
+var manualExp = function (number, power) {
+    if (power === 0){
+        result = 1;
+    } else {
+        var i, result = 0;
+        result = number;
+        for (i = 0; i < power - 1; i += 1) {
+            result *= result;
+        }
+    }
+    return result;
+};
+
 /**
  * Function for testing whether player has enough gold to buy building/item or not.
  * If the object purchased does not have price ratio and unrelated to incrementals, set priceRatio to 1.
@@ -82,8 +96,8 @@ var dmgCalculator = function (damageValue, attackType, armorType) {
  * @param  {Number} numCurrentlyOwned   Number of currently owned building/item. (unnecessary if building/item price is not incremental, set to 0 in that case to optimize time)
  * @return {Boolean}                    True if player indeed can buy the building/item. False otherwise.
  */
-this.canBuy = function (goldAmount, basePrice, priceRatio, numCurrentlyOwned) {
-    if (goldAmount >= (basePrice * Math.pow(priceRatio, numCurrentlyOwned))) {
+var canBuy = function (goldAmount, basePrice, priceRatio, numCurrentlyOwned) {
+    if (goldAmount >= (basePrice * manualExp(priceRatio, numCurrentlyOwned))) {
         return true;
     } else {
         return false;

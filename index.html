@@ -9,6 +9,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 	<script src="utilities.js"></script>
 	<script src="journalUtilities.js"></script>
+	<script src="building.js"></script>
 	<script src="game.js"></script>
 	<script src="monster.js"></script>
 </head>
@@ -63,8 +64,23 @@
             </div>
 
             <!-- Building Section -->
-            <div class="panel" id="divBuilding" ng-show="view.activeView == 'Building'">
-                Building SECTION!
+            <div class="panel" id="divBuilding" ng-controller="BuildingCtrl as building" ng-show="view.activeView == 'Building'">
+                <div id="playerOwnedSection">
+                    Number of miner: {{building.miningTown.activeMiners}}/{{building.miningTown.totalMiners}}
+                    Number of mines owned:
+                    <ul ng-repeat="miningPlace in building.miningTown.miningPlace">
+                        <li>{{miningPlace.name}}: {{miningPlace.numOwned}}</li>
+                    </ul>
+                </div>
+                <div id="buySection">
+                    <div id="buyMiners">
+                        <button ng-click="building.miningTown.buyMiners(character.hero.gold)">Buy Miners. Cost: {{building.calculatePrice(building.miningTown.baseMinersPrice, building.miningTown.baseMinersPriceRatio, building.miningTown.totalMiners)|number:2}}</button>
+                        <button ng-click="building.miningTown.sellMiners(character.hero.gold)">Sell Miners.</button>
+                    </div>
+                    <div id="buyMiningSpots" ng-repeat="miningPlace in building.miningTown.miningPlace">
+                        <button ng-click="building.miningTown.buyMine(character.hero.gold, miningPlace.name)">Buy {{miningPlace.name}}. Cost: {{building.calculatePrice(miningPlace.basePrice, miningPlace.priceRatio, miningPlace.numOwned)|number:2}}</button>
+                    </div>
+                </div>
             </div>
 
             <!-- Item Shop Section -->

@@ -72,7 +72,7 @@
 			power: 30,
 			stamina: 4,
 			
-            armorType: "LightArmor",
+            armorType: "lightArmor",
 
 			expDrop: 8,
 			goldDrop: 8

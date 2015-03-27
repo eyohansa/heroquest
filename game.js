@@ -36,8 +36,8 @@ $(document).ready(function () {
     });
     
 	game.factory('journalService', function () {
-        
-        var entryQueue = [], queueCap = 10; //I think this was deleted in the previous commit. Might be a mistake when merging.
+        var entryQueue = []; 
+        var queueCap = 10;
 		
         return {
 			write: function (message) {
@@ -78,73 +78,82 @@ $(document).ready(function () {
             this.activeView = viewName;
         };
     });
+
+    /**
+     * Handles hero logic.
+     */
+    game.factory("heroService", function() {
+    	return {
+    		init: function() {
+    			return {
+					name: "Rat Hater",
+		            nameLocked: false,
+		            unconscious: false,
+					experiencePoints: 0,
+					level: 1,
+					currentHealth: 100,
+					maxHealth: 100,
+					power: 10,
+					currentStamina: 15,
+					maxStamina: 15,
+					regen: {
+						health: 10,
+						stamina: 4
+					},
+		            selectedAttackID: -1,
+		            itemInventory: [],
+		            
+		            // Hero's Attack Types (can be added later). For now, damage types are Slash, Pierce, Blunt, Magic and Neutral)
+		            // Also, skills can be put in here, if necessary.
+		            attackType: [{
+		                attackID: 0,
+		                attackName: "Slice and d6 'em",
+		                damageType: "Slash",
+		                flavText: "",
+		                staminaUsage: 1,
+		                powerRating: 1
+		            }, {
+		                attackID: 1,
+		                attackName: "Stabbity stab 'em",
+		                damageType: "Piercing",
+		                flavText: "",
+		                staminaUsage: 1,
+		                powerRating: 1
+		            }, {
+		                attackID: 2,
+		                attackName: "Bash with something \"blunt\" ",
+		                damageType: "Blunt",
+		                flavText: "You know what I mean *nudge*. You know, with your head, or arm, or legs.",
+		                staminaUsage: 1.5,
+		                powerRating: 1.25
+		            }, {
+		                attackID: 3,
+		                attackName: "Some kind of \"Attack\"",
+		                damageType: "Neutral",
+		                flavText: "If this attack name isn't shady enough, I don't know what else to write to make it \"neutral\"",
+		                staminaUsage: 0.5,
+		                powerRating: 0.5
+		            }, {
+		                attackID: 4,
+		                attackName: "Something like magic missile",
+		                damageType: "Magic",
+		                flavText: "Just because magic missile is overused. And yet, I can't get away from that name",
+		                staminaUsage: 2,
+		                powerRating: 1.5
+		            }],
+		            
+		            selectAttack: function () {
+		                journalService.write(this.name + " chosen " + attackTypeColorText(this.attackType[this.selectedAttackID].attackName, this.attackType[this.selectedAttackID].damageType));
+		            }
+				};
+			}
+		}
+    });
         
-	game.controller("CharacterCtrl", ['heroInventoryService', '$interval', '$document', 'journalService', function (heroInventoryService, $interval, $document, journalService) {
+	game.controller("CharacterCtrl", ['heroService', 'heroInventoryService', '$interval', '$document', 'journalService', function (heroService, heroInventoryService, $interval, $document, journalService) {
 		this.day = 0;
 
-		var defaultHero = {
-			name: "Rat Hater",
-            nameLocked: false,
-            unconscious: false,
-			experiencePoints: 0,
-			level: 1,
-			currentHealth: 100,
-			maxHealth: 100,
-			power: 10,
-			currentStamina: 15,
-			maxStamina: 15,
-			regen: {
-				health: 10,
-				stamina: 4
-			},
-            selectedAttackID: -1,
-            itemInventory: [],
-            
-            // Hero's Attack Types (can be added later). For now, damage types are Slash, Pierce, Blunt, Magic and Neutral)
-            // Also, skills can be put in here, if necessary.
-            attackType: [{
-                attackID: 0,
-                attackName: "Slice and d6 'em",
-                damageType: "Slash",
-                flavText: "",
-                staminaUsage: 1,
-                powerRating: 1
-            }, {
-                attackID: 1,
-                attackName: "Stabbity stab 'em",
-                damageType: "Piercing",
-                flavText: "",
-                staminaUsage: 1,
-                powerRating: 1
-            }, {
-                attackID: 2,
-                attackName: "Bash with something \"blunt\" ",
-                damageType: "Blunt",
-                flavText: "You know what I mean *nudge*. You know, with your head, or arm, or legs.",
-                staminaUsage: 1.5,
-                powerRating: 1.25
-            }, {
-                attackID: 3,
-                attackName: "Some kind of \"Attack\"",
-                damageType: "Neutral",
-                flavText: "If this attack name isn't shady enough, I don't know what else to write to make it \"neutral\"",
-                staminaUsage: 0.5,
-                powerRating: 0.5
-            }, {
-                attackID: 4,
-                attackName: "Something like magic missile",
-                damageType: "Magic",
-                flavText: "Just because magic missile is overused. And yet, I can't get away from that name",
-                staminaUsage: 2,
-                powerRating: 1.5
-            }],
-            
-            selectAttack: function () {
-                journalService.write(this.name + " chosen " + attackTypeColorText(this.attackType[this.selectedAttackID].attackName, this.attackType[this.selectedAttackID].damageType));
-            }
-		};
-
-		this.hero = defaultHero;
+		this.hero = heroService.init();
 		var injectHero = this;
 
 		// Hero's health and stamina regen. Regen is set at every second.
@@ -207,7 +216,8 @@ $(document).ready(function () {
 		});
 
 		this.reset = function() {
-			this.hero = defaultHero;
+			this.hero = heroService.init();
+			this.day = 0;
 		}
 
 

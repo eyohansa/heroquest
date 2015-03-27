@@ -36,37 +36,36 @@ $(document).ready(function () {
     });
     
 	game.factory('journalService', function () {
-		var journal = {}, entryQueue = [], queueCap = 10, injectHero = this;
 
-		journal.write = function (message) {
-			if (entryQueue.push(message + '<br />') > queueCap) {
-				entryQueue.shift();
+		return {
+			write: function (message) {
+				if (entryQueue.push(message + '<br />') > queueCap) {
+					entryQueue.shift();
+				}
+
+				$("#divJournal").html(entryQueue);
+			},
+
+			/**
+			 * Save the state of the object to local storage with specified key.
+			 * @param  {String} key    Item key of local storage where the object will be stored.
+			 * @param  {Object} object Object to be saved.
+			 */
+			save: function (key, object) {
+				var objectJson = JSON.stringify(object);
+				localStorage.setItem(key, objectJson);
+			},
+
+			/**
+			 * Load the state of the object from local storage with specified key.
+			 * @param  {String} key Item key of local storage where the object is stored.
+			 * @return {Object}     The object stored within local storage.
+			 */
+			load: function (key) {
+				var item = localStorage.getItem(key);
+				return JSON.parse(item);
 			}
-
-			$("#divJournal").html(entryQueue);
-		};
-
-		/**
-		 * Save the state of the object to local storage with specified key.
-		 * @param  {String} key    Item key of local storage where the object will be stored.
-		 * @param  {Object} object Object to be saved.
-		 */
-		journal.save = function (key, object) {
-			var objectJson = JSON.stringify(object);
-			localStorage.setItem(key, objectJson);
-		};
-
-		/**
-		 * Load the state of the object from local storage with specified key.
-		 * @param  {String} key Item key of local storage where the object is stored.
-		 * @return {Object}     The object stored within local storage.
-		 */
-		journal.load = function (key) {
-			var item = localStorage.getItem(key);
-			return JSON.parse(item);
-		};
-
-		return journal;
+		}
 	});
     
     game.controller('ViewCtrl', function () {

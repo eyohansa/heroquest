@@ -6,7 +6,7 @@ $(document).ready(function () {
 	var game = angular.module("HeroicAdventure", ['Monsters', 'Buildings']);
 
     game.factory('heroInventoryService', function () {
-        var itemList = ["Rock", "Copper", "Iron", "Silver", "Potion"], itemInventory = [], i = 0;
+        var itemList = ["Gold", "Rock", "Copper", "Iron", "Silver", "Potion"], itemInventory = [], i = 0;
         for (i = 0; i < itemList.length; i += 1) {
             itemInventory.push({itemName: itemList[i], itemNumber: 0});
         }
@@ -36,8 +36,10 @@ $(document).ready(function () {
     });
     
 	game.factory('journalService', function () {
-
-		return {
+        
+        var entryQueue = [], queueCap = 10; //I think this was deleted in the previous commit. Might be a mistake when merging.
+		
+        return {
 			write: function (message) {
 				if (entryQueue.push(message + '<br />') > queueCap) {
 					entryQueue.shift();
@@ -77,7 +79,7 @@ $(document).ready(function () {
         };
     });
         
-	game.controller("CharacterCtrl", ['$interval', '$document', 'journalService', function ($interval, $document, journalService) {
+	game.controller("CharacterCtrl", ['heroInventoryService', '$interval', '$document', 'journalService', function (heroInventoryService, $interval, $document, journalService) {
 		this.day = 0;
 
 		var defaultHero = {
@@ -86,7 +88,6 @@ $(document).ready(function () {
             unconscious: false,
 			experiencePoints: 0,
 			level: 1,
-			gold: 0,
 			currentHealth: 100,
 			maxHealth: 100,
 			power: 10,
@@ -97,8 +98,7 @@ $(document).ready(function () {
 				stamina: 4
 			},
             selectedAttackID: -1,
-            
-            
+            itemInventory: [],
             
             // Hero's Attack Types (can be added later). For now, damage types are Slash, Pierce, Blunt, Magic and Neutral)
             // Also, skills can be put in here, if necessary.
@@ -179,6 +179,8 @@ $(document).ready(function () {
 				injectHero.hero.currentStamina = injectHero.hero.maxStamina;
 			}
             
+            injectHero.hero.itemInventory = heroInventoryService;
+            
 		}, GAME_TICK_CONST * TIME_SECOND_CONSTANT);
 		
 		this.save = function() {
@@ -195,6 +197,13 @@ $(document).ready(function () {
 
 		$document.ready(function () {
 			//injectHero.load();
+            journalService.write("You, a lone person, who wander in sewer for ages, decided to turn your life around.");
+            journalService.write("");
+            journalService.write("One day, you think to yourself \"Hmm, I should try start murdering these rats\".");
+            journalService.write("");
+            journalService.write("While the idea just sounded god awful, unrelated and questionable, the journey begins nonetheless...");
+            journalService.write("");
+            journalService.write("One thing to remember, player. Do not incur the wrath of the creator, or you shall receive eternal curse.");
 		});
 
 		this.reset = function() {
@@ -209,7 +218,7 @@ $(document).ready(function () {
 		}, 10 * TIME_SECOND_CONSTANT);
 	}]);
 
-	game.controller("ActionCtrl", ['journalService', function (journalService) {
+	game.controller("ActionCtrl", ['heroInventoryService', 'journalService', function (heroInventoryService, journalService) {
 		
 		/////// Exploration Functions
 		
@@ -252,7 +261,7 @@ $(document).ready(function () {
 				// Check if enemy is dead
 				if (monsData.currentHealth <= 0) {
 					charHero.experiencePoints += monsData.expDrop;
-					charHero.gold += monsData.goldDrop;
+					heroInventoryService.addItemToInventory("Gold", monsData.goldDrop);
 					monsData.currentHealth = monsData.maxHealth;
 					journalService.write(boldText(charHero.name) + " defeated " + boldText(monsData.name) + ". " + charHero.name + " gained " + colorText(boldText(monsData.expDrop) + " exp", "green") + " and " + colorText(boldText(monsData.goldDrop) + " gold","#ffa500") + ".");
 					

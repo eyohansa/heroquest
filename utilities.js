@@ -81,7 +81,7 @@ var manualExp = function (number, power) {
         var i, result = 0;
         result = number;
         for (i = 0; i < power - 1; i += 1) {
-            result *= result;
+            result *= number;
         }
     }
     return result;

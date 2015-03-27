@@ -8,23 +8,18 @@
     "use strict"; // To surpress JSLint error message
 	var buildingData = angular.module("Buildings", ['HeroicAdventure']);
 
-	buildingData.controller("BuildingCtrl", ['$interval', 'heroInventoryService', function ($interval, heroInventoryService) {
+	buildingData.controller("BuildingCtrl", ['journalService', '$interval', 'heroInventoryService', function (journalService, $interval, heroInventoryService) {
         
         this.calculatePrice = function (basePrice, priceRatio, numOwnedProperties) {
             return basePrice * manualExp(priceRatio, numOwnedProperties);
         };
         
         this.miningTown = {
-            //Temporary Storage
-            rock:0,
-            copper:0,
-            silver:0,
-            gold:0,
             
             activeMiners: 0,
             totalMiners: 0,
-            baseMinersPriceRatio: 1.10,
-            baseMinersPrice: 1,
+            baseMinersPriceRatio: 1.2,
+            baseMinersPrice: 2,
             
             miningPlace: [{
                 // Gives rock, copper and very low amount of gold.
@@ -33,7 +28,7 @@
                 numOwned: 0,
                 numMiner: 0,
                 basePrice: 10,
-                priceRatio: 1.15,
+                priceRatio: 1.5,
                 baseGoldRate: 0.05,
                 itemList: ["rock", "copper", "gold"],
                 CDFpercentage: [85, 95, 100] //This is probability in CDF form. Basically, the percentage of getting rock is 85%, copper 10% and gold 5%.
@@ -45,7 +40,7 @@
                 numOwned: 0,
                 numMiner: 0,
                 basePrice: 50,
-                priceRatio: 1.15,
+                priceRatio: 1.5,
                 baseGoldRate: 0.1,
                 itemList: ["rock", "copper", "silver", "gold"],
                 CDFpercentage: [50, 75, 90, 100]
@@ -56,8 +51,8 @@
                 numOwned: 0,
                 numMiner: 0,
                 basePrice: 500,
-                priceRatio: 1.15,
-                baseGoldRate: 0.2,
+                priceRatio: 1.5,
+                baseGoldRate: 0.4,
                 itemList: ["copper", "silver", "gold"],
                 CDFpercentage: [50, 80, 100]
             }, {
@@ -66,9 +61,9 @@
                 levelReq: 15,
                 numOwned: 0,
                 numMiner: 0,
-                baseGoldRate: 0.4,
                 basePrice: 10000,
-                priceRatio: 1.15,
+                priceRatio: 1.5,
+                baseGoldRate: 1.5,
                 itemList: ["silver", "gold"],
                 CDFpercentage: [60, 100]
             }],
@@ -119,82 +114,83 @@
             },
             
             // For buying a mine.
-            buyMine: function (charHero, mineName) {
+            buyMine: function (mineName) {
                 var mineIndex = this.findMineIndex(mineName);
-                if (canBuy(charHero.gold, this.miningPlace[mineIndex].basePrice, this.miningPlace[mineIndex].priceRatio, this.miningPlace[mineIndex].numOwned)) {
+                if (canBuy(heroInventoryService[0].itemNumber, this.miningPlace[mineIndex].basePrice, this.miningPlace[mineIndex].priceRatio, this.miningPlace[mineIndex].numOwned)) {
+                    heroInventoryService.reduceItemFromInventory("Gold", this.miningPlace[mineIndex].basePrice * manualExp(this.miningPlace[mineIndex].priceRatio, this.miningPlace[mineIndex].numOwned));
                     this.miningPlace[mineIndex].numOwned += 1;
-                    charHero.gold -= this.miningPlace[mineIndex].basePrice * Math.pow(this.miningPlace[mineIndex].priceRatio, this.miningPlace[mineIndex].numOwned);
+                } else {
+                    journalService.write("Not enough money, dude");
                 }
             },
 
             // For removing a miner from a mine.
             removeMiners: function (mineName) {
-                this.miningPlace[this.findMineIndex(mineName)].numMiner -= 1;
-                this.activeMiners -= 1;
+                if (this.activeMiners > 0 && this.miningPlace[this.findMineIndex(mineName)].numMiner > 1) {
+                    this.miningPlace[this.findMineIndex(mineName)].numMiner -= 1;
+                    this.activeMiners -= 1;
+                } else if (this.activeMiners === 0) {
+                    journalService.write("You don't even have miners!");
+                } else {
+                    journalService.write("All of them are not working right now. Who else are you trying to remove, eh?");
+                }
             },
 
             // For adding a miner to a mine.
             addMiners: function (mineName) {
-                this.miningPlace[this.findMineIndex(mineName)].numMiner += 1;
-                this.activeMiners += 1;
+                if (this.activeMiners < this.totalMiners) {
+                    this.miningPlace[this.findMineIndex(mineName)].numMiner += 1;
+                    this.activeMiners += 1;
+                } else {
+                    journalService.write("Hire more miner, man");
+                }
             },
 
             // For hiring miner.
-            buyMiners: function (charHero) {
-                if (canBuy(charHero.gold, this.baseMinersPrice, this.baseMinersPriceRatio, this.totalMiners)) {
+            buyMiners: function () {
+                if (canBuy(heroInventoryService[0].itemNumber, this.baseMinersPrice, this.baseMinersPriceRatio, this.totalMiners)) {
+                    heroInventoryService.reduceItemFromInventory("Gold", this.baseMinersPrice * manualExp(this.baseMinersPriceRatio, this.totalMiners));
                     this.totalMiners += 1;
-                    charHero.gold -= this.baseMinersPrice * Math.pow(this.baseMinersPrice, this.totalMiners);
+                } else {
+                    journalService.write("Not enough money, dude");
                 }
             },
             
             // For firing miner.
-            sellMiners: function (charHero) {
-                this.totalMiners -= 1;
-                charHero.gold += this.baseMinersPrice * Math.pow(this.baseMinersPrice, this.totalMiners - 1);
-                if (this.activeMiners === this.totalMiners) {
-                    //REMOVE RANDOM MINERS
+            sellMiners: function () {
+                if (this.totalMiners > 0 && this.totalMiners !== this.activeMiners) {
+                    this.totalMiners -= 1;
+                    heroInventoryService.addItemFromInventory("Gold", this.baseMinersPrice * manualExp(this.baseMinersPriceRatio, this.totalMiners - 1));
+                } else if (this.totalMiners === this.activeMiners) {
+                    journalService.write("Remove a miner from any mine first");
+                } else {
+                    journalService.write("Look, you don't even have a miner, what the heck are you trying to sell?");
                 }
-            },
-            
-            collectMine: function (charHero) {
-                charHero.itemInventory[0].itemNumber += this.rock;
-                charHero.itemInventory[charHero.getItemIndex("Copper")].itemNumber += this.copper;
-                charHero.itemInventory[charHero.getItemIndex("Silver")].itemNumber += this.silver;
-                charHero.gold += this.gold;
-                
-                this.rock = 0;
-                this.copper = 0;
-                this.silver = 0;
-                this.gold = 0;
             }
         };
         
         var injectMine = this;
         var miningTick = $interval(function () {
             var result = injectMine.miningTown.mines(), i = 0;
+            var rock = 0, copper = 0, silver = 0, gold = 0;
             console.log(result);
             for (i = 0; i < result.length; i += 1) {
                 if (result[i] === "rock") {
-                    injectMine.miningTown.rock += 1;
+                    rock += 1;
                 } else if (result[i] === "copper") {
-                    injectMine.miningTown.copper += 1;
+                    copper += 1;
                 } else if (result[i] === "silver") {
-                    injectMine.miningTown.silver += 1;
+                    silver += 1;
                 } else {
-                    injectMine.miningTown.gold += result[i];
+                    gold += result[i];
                 }
             }
             
             //Add item to hero here.
-            heroInventoryService.addItemToInventory("Rock", injectMine.miningTown.rock);
-            heroInventoryService.addItemToInventory("Copper", injectMine.miningTown.copper);
-            heroInventoryService.addItemToInventory("Silver", injectMine.miningTown.silver);
-            
-            injectMine.miningTown.rock = 0;
-            injectMine.miningTown.copper = 0;
-            injectMine.miningTown.silver = 0;
-            
-            console.log(heroInventoryService[0].itemName + heroInventoryService[0].itemNumber);
+            heroInventoryService.addItemToInventory("Rock", rock);
+            heroInventoryService.addItemToInventory("Copper", copper);
+            heroInventoryService.addItemToInventory("Silver", silver);
+            heroInventoryService.addItemToInventory("Gold", gold);
         }, 1000);
 
 	}]);

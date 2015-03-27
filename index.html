@@ -26,23 +26,17 @@
 			<span>Level:</span> {{character.hero.level}}<br />
 			<span>Experience:</span> {{character.hero.experiencePoints}}<br />
 			<br><span>Power:</span>	{{character.hero.power}}
-			<br><span>Health:</span><span ng-class="{low:(character.hero.currentHealth/character.hero.maxHealth) < 0.25}"> {{character.hero.currentHealth|number:1}}/{{character.hero.maxHealth|number:1}}</span> (+{{character.hero.regen.health}})
-			<br><span>Stamina:</span>	<span ng-class="{low:(character.hero.currentStamina/character.hero.maxStamina) < 0.25}"> {{character.hero.currentStamina|number:1}}/{{character.hero.maxStamina|number:1}}</span> (+{{character.hero.regen.stamina}})
+			<br><span>Health:</span><span ng-class="{low:(character.hero.currentHealth/character.hero.maxHealth) < 0.25}"> {{character.hero.currentHealth|number:2}}/{{character.hero.maxHealth|number:2}}</span> (+{{character.hero.regen.health}} / sec)
+			<br><span>Stamina:</span>	<span ng-class="{low:(character.hero.currentStamina/character.hero.maxStamina) < 0.25}"> {{character.hero.currentStamina|number:2}}/{{character.hero.maxStamina|number:2}}</span> (+{{character.hero.regen.stamina}} / sec)
 			<div><span>Day:</span> {{character.day}}</div>
             <br>Inventory:
-            <span ng-repeat="item in character.hero.itemInventory" ng-show="item.itemNumber > 0"><br>{{item.itemName}}: {{item.itemNumber}}</span>
-			<div ng-show="character.hero.gold > 0"><span>Gold:</span> {{character.hero.gold}}</div> <br />
+            <span ng-repeat="item in character.hero.itemInventory" ng-show="item.itemNumber > 0"><br>{{item.itemName}}: {{item.itemNumber|number:2}}</span>
+            
+            
 		</div>
 		
         
-        <div id="gameSection" ng-controller="ViewCtrl as view">
-            
-            <!--<div id="viewMenu">
-                <span ng-repeat="menuOption in view.menu">
-                    <button ng-click="view.switchActiveView(menuOption)">{{menuOption}}</button>
-                </span>
-            </div>-->
-
+        <div id="gameSection" ng-controller="ViewCtrl as view" style="width: 80%;">
             
         	<ul class="nav nav-tabs">
         		<li role="presentation" ng-repeat="menuItem in view.menu" ng-class="{active:view.activeView == menuItem}"><a href ng-click="view.switchActiveView(menuItem)">{{menuItem}}</a></li>
@@ -59,7 +53,7 @@
                     </div><br>
 
                     <div ng-repeat="mons in monster.monstah">
-                        <button class='monster btn btn-default' ng-disabled="character.hero.unconscious" ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}} [HP: {{mons.currentHealth|number:1}}/{{mons.maxHealth|number:1}}]</button>
+                        <button class='monster btn btn-default' ng-disabled="character.hero.unconscious" ng-click="action.battle(character.hero, mons)" ng-show="mons.levelReq<=character.hero.level">Fight {{mons.name}} [HP: {{mons.currentHealth|number:2}}/{{mons.maxHealth|number:2}}]</button>
                     </div>
 
                 </div>
@@ -77,17 +71,16 @@
                 <div id="buySection">
                     <table>
                         <tr id="buyMiners">
-                            <td><button ng-click="building.miningTown.buyMiners(character.hero)">Buy Miners. Cost: {{building.calculatePrice(building.miningTown.baseMinersPrice, building.miningTown.baseMinersPriceRatio, building.miningTown.totalMiners)|number:2}}</button></td>
-                            <td><button ng-click="building.miningTown.sellMiners(character.hero)">Sell Miners.</button></td>
+                            <td><button ng-click="building.miningTown.buyMiners()">Buy Miners. Cost: {{building.calculatePrice(building.miningTown.baseMinersPrice, building.miningTown.baseMinersPriceRatio, building.miningTown.totalMiners)|number:2}}</button></td>
+                            <td><button ng-click="building.miningTown.sellMiners()">Sell Miners.</button></td>
                         </tr>
                         <tr id="buyMiningSpots" ng-repeat="miningPlace in building.miningTown.miningPlace">
-                            <td><button ng-click="building.miningTown.buyMine(character.hero, miningPlace.name)">Buy {{miningPlace.name}}. Cost: {{building.calculatePrice(miningPlace.basePrice, miningPlace.priceRatio, miningPlace.numOwned)|number:2}}</button></td>
+                            <td><button ng-click="building.miningTown.buyMine(miningPlace.name)">Buy {{miningPlace.name}}. Cost: {{building.calculatePrice(miningPlace.basePrice, miningPlace.priceRatio, miningPlace.numOwned)|number:2}}</button></td>
                             <td><button ng-click="building.miningTown.addMiners(miningPlace.name)">Allocate Miner here</button></td>
                             <td><button ng-click="building.miningTown.removeMiners(miningPlace.name)">Remove Miner from here</button></td>
                         </tr>
                     </table>
                 </div><br>
-                <button ng-click="building.miningTown.collectMine(character.hero)">Collect Items</button>
             </div>
 
             <!-- Item Shop Section -->
@@ -109,10 +102,15 @@
             <div class="panel" id="divChangeEquipment" ng-show="view.activeView == 'Equipment'">
                 Change Equipment SECTION!
             </div>
+            
         </div>
         
-		<div id="divJournal"></div>
-        
 	</div>
+    
+    <div class="container" id="journal" width="70vw">
+        <h3>Journal Log:</h3>
+        <div id="divJournal" ></div>
+    </div>
+    
 </body>
 </html>

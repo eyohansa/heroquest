@@ -21,13 +21,18 @@ div#menu a:hover {
 
 div#stats {
 	float: left;
-	width: 250px;
+	width: 20%;
 	height: 400px;
 }
 
 div#divJournal {
 	clear:both;
 }
+
+
+
+
+
 
 .low{
 	color: red;

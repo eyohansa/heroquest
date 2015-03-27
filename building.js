@@ -6,9 +6,9 @@
 
 (function (angular) {
     "use strict"; // To surpress JSLint error message
-	var buildingData = angular.module("Buildings", []);
+	var buildingData = angular.module("Buildings", ['HeroicAdventure']);
 
-	buildingData.controller("BuildingCtrl", ['$interval', function ($interval) {
+	buildingData.controller("BuildingCtrl", ['$interval', 'heroInventoryService', function ($interval, heroInventoryService) {
         
         this.calculatePrice = function (basePrice, priceRatio, numOwnedProperties) {
             return basePrice * manualExp(priceRatio, numOwnedProperties);
@@ -170,7 +170,7 @@
         };
         
         var injectMine = this;
-        var miningTick = $interval(function (charHero) {
+        var miningTick = $interval(function () {
             var result = injectMine.miningTown.mines(), i = 0;
             console.log(result);
             for (i = 0; i < result.length; i += 1) {
@@ -184,6 +184,17 @@
                     injectMine.miningTown.gold += result[i];
                 }
             }
+            
+            //Add item to hero here.
+            heroInventoryService.addItemToInventory("Rock", injectMine.miningTown.rock);
+            heroInventoryService.addItemToInventory("Copper", injectMine.miningTown.copper);
+            heroInventoryService.addItemToInventory("Silver", injectMine.miningTown.silver);
+            
+            injectMine.miningTown.rock = 0;
+            injectMine.miningTown.copper = 0;
+            injectMine.miningTown.silver = 0;
+            
+            console.log(heroInventoryService[0].itemName + heroInventoryService[0].itemNumber);
         }, 1000);
 
 	}]);

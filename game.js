@@ -1,10 +1,40 @@
-$(document).ready(function() {
+$(document).ready(function () {
 	$('[data-toggle="tooltip"]').tooltip();
 });
 
 (function (angular) {
 	var game = angular.module("HeroicAdventure", ['Monsters', 'Buildings']);
 
+    game.factory('heroInventoryService', function () {
+        var itemList = ["Rock", "Copper", "Iron", "Silver", "Potion"], itemInventory = [], i = 0;
+        for (i = 0; i < itemList.length; i += 1) {
+            itemInventory.push({itemName: itemList[i], itemNumber: 0});
+        }
+
+        itemInventory.getItemIndex = function (itemName) {
+            var i;
+
+            for (i = 0; i < this.length; i += 1) {
+                if (itemName === this[i].itemName) {
+                    return i;
+                }
+            }
+
+            return 0; // If no match can be found, return 0
+        };
+
+        itemInventory.addItemToInventory = function (itemName, itemNumber) {
+            this[this.getItemIndex(itemName)].itemNumber += itemNumber;
+        };
+
+        itemInventory.reduceItemFromInventory = function (itemName, itemNumber) {
+            this[this.getItemIndex(itemName)].itemNumber -= itemNumber;
+        };
+        
+        return itemInventory;
+        
+    });
+    
 	game.factory('journalService', function () {
 		var journal = {}, entryQueue = [], queueCap = 10, injectHero = this;
 
@@ -69,22 +99,7 @@ $(document).ready(function() {
 			},
             selectedAttackID: -1,
             
-            itemInventory: [{
-                itemName: "Rock",
-                itemNumber: 0
-            }, {
-                itemName: "Copper",
-                itemNumber: 0
-            }, {
-                itemName: "Iron",
-                itemNumber: 0
-            }, {
-                itemName: "Silver",
-                itemNumber: 0
-            }, {
-                itemName: "Potion",
-                itemNumber: 0
-            }],
+            
             
             // Hero's Attack Types (can be added later). For now, damage types are Slash, Pierce, Blunt, Magic and Neutral)
             // Also, skills can be put in here, if necessary.
@@ -124,26 +139,6 @@ $(document).ready(function() {
                 staminaUsage: 2,
                 powerRating: 1.5
             }],
-            
-            getItemIndex: function (itemName) {
-                var i;
-                
-                for (i = 0; i < this.itemInventory.length; i += 1) {
-                    if (itemName === this.itemInventory[i].itemName) {
-                        return i;
-                    }
-                }
-                
-                return 0; // If no match can be found, return 0
-            },
-            
-            addItemToInventory: function (itemName, itemNumber) {
-                
-            },
-            
-            reduceItemFromInventory: function (itemName, itemNumber) {
-                
-            },
             
             selectAttack: function () {
                 journalService.write(this.name + " chosen " + attackTypeColorText(this.attackType[this.selectedAttackID].attackName, this.attackType[this.selectedAttackID].damageType));

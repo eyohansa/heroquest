@@ -83,10 +83,12 @@ $(document).ready(function () {
      * Handles hero logic.
      */
     game.factory("heroService", function() {
+    	var selectedAttackID = -1;
+
     	return {
     		init: function() {
     			return {
-					name: "Rat Hater",
+					name: "Generic Hero",
 		            nameLocked: false,
 		            unconscious: false,
 					experiencePoints: 0,
@@ -142,10 +144,11 @@ $(document).ready(function () {
 		                powerRating: 1.5
 		            }],
 		            
-		            selectAttack: function () {
-		                journalService.write(this.name + " chosen " + attackTypeColorText(this.attackType[this.selectedAttackID].attackName, this.attackType[this.selectedAttackID].damageType));
-		            }
+		            
 				};
+			},
+			hero: function() {
+				return hero;
 			}
 		}
     });
@@ -219,6 +222,10 @@ $(document).ready(function () {
 			this.hero = heroService.init();
 			this.day = 0;
 		}
+
+		this.selectAttack = function () {
+            journalService.write(this.hero.name + " has chosen " + attackTypeColorText(this.hero.attackType[this.hero.selectedAttackID].attackName, this.hero.attackType[this.hero.selectedAttackID].damageType));
+        }
 
 
         // Interval function for increasing number of day passed

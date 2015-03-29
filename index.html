@@ -49,7 +49,7 @@
 
                     Choose your attack type:
                     <div ng-repeat="attack in character.hero.attackType">
-                        <input type="radio" title="{{attack.flavText}}" ng-model="character.hero.selectedAttackID" ng-change="character.hero.selectAttack()" ng-value="attack.attackID"><b><span title="{{attack.flavText}}" ng-class="{attackIsSelected:character.hero.selectedAttackID === attack.attackID}"><span ng-class="attack.damageType">{{attack.attackName}}</span></b>: Cost {{attack.staminaUsage}} stamina. Deals <span ng-class="attack.damageType">{{attack.damageType}}</span> damage.</span>
+                        <input type="radio" title="{{attack.flavText}}" ng-model="character.hero.selectedAttackID" ng-change="character.selectAttack()" ng-value="attack.attackID"><b><span title="{{attack.flavText}}" ng-class="{attackIsSelected:character.hero.selectedAttackID === attack.attackID}"><span ng-class="attack.damageType">{{attack.attackName}}</span></b>: Cost {{attack.staminaUsage}} stamina. Deals <span ng-class="attack.damageType">{{attack.damageType}}</span> damage.</span>
                     </div><br>
 
                     <div ng-repeat="mons in monster.monstah">

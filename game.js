@@ -104,6 +104,15 @@ $(document).ready(function () {
 					},
 		            selectedAttackID: -1,
 		            itemInventory: [],
+                    equipment: {
+                        lHand: "Stick",
+                        rHand: "Nothing",
+                        head: "Nothing",
+                        torso: "Cloth",
+                        arm: "Nothing",
+                        leg: "Ragged pants",
+                        accesories: "Shiny Ring"
+                    },
 		            
 		            // Hero's Attack Types (can be added later). For now, damage types are Slash, Pierce, Blunt, Magic and Neutral)
 		            // Also, skills can be put in here, if necessary.
@@ -294,8 +303,8 @@ $(document).ready(function () {
 						//Increase hero health and stamina regen every 3 level
 						if (charHero.level % 3 === 0) {
 							charHero.regen.health += 3;
-							charHero.regen.stamina += 0.75;
-                            journalService.write(italicText(">>>>>>Also, you gained +3 health regen and +0.75 stamina regen"));
+							charHero.regen.stamina += 1;
+                            journalService.write(italicText(">>>>>>Also, you gained +3 health regen and +1 stamina regen"));
 						}
 					}
 				}
@@ -334,6 +343,12 @@ $(document).ready(function () {
 
 		
 	}]);
+    
+    game.controller("EquipmentCtrl", ['heroService', 'heroInventoryService', 'journalService', function (heroService, heroInventoryService, journalService) {
+        var changeEquipment = function(bodyPart, itemName){
+            
+        }
+    }]);
 
 })(window.angular);
 

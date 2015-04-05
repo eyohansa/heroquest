@@ -192,6 +192,14 @@
             heroInventoryService.addItemToInventory("Silver", silver);
             heroInventoryService.addItemToInventory("Gold", gold);
         }, 1000);
+        
+        this.itemStore: {
+            
+        }
+        
+        this.armory: {
+            
+        }
 
 	}]);
     	

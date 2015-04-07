@@ -1,6 +1,16 @@
 (function (angular) {
 	var monData = angular.module("Monsters", []);
 
+	monData.factory("monsterService", function () {
+		var monsters = [];
+
+		return {
+			addMonster: function (monster) {
+				monsters.push(monster);
+			}
+		}
+	});
+
 	monData.controller("MonsterData", function () {
 		
 		this.monstah = [{
@@ -98,10 +108,5 @@
 		};
 		
 
-	});
-    
-    var addMonster = function (monsname, monslevelReq, monsflavPlayerLoseMessage, monsmaxHealth, monspower, monsstamina, monsarmorType, monsexpDrop, monsgoldDrop) {
-        //this.monstah.push({ID: this.monstah.length, name: monsname, levelReq: monslevelReq, flavPlayerLoseMessage, monsflavPlayerLoseMessage, currentHealth: monsmaxHealth, maxHealth: monsmaxHealth, power: monspower, stamina: monsstamina, armorType: monsarmorType, expDrop: monsexpDrop, goldDrop: monsgoldDrop});
-    };
-	
+	});	
 })(window.angular);

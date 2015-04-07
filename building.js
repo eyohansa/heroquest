@@ -193,11 +193,11 @@
             heroInventoryService.addItemToInventory("Gold", gold);
         }, 1000);
         
-        this.itemStore: {
+        this.itemStore = {
             
         }
         
-        this.armory: {
+        this.armory = {
             
         }
 

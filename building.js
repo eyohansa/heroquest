@@ -8,11 +8,15 @@
     "use strict"; // To surpress JSLint error message
 	var buildingData = angular.module("Buildings", ['HeroicAdventure']);
 
-	buildingData.controller("BuildingCtrl", ['journalService', '$interval', 'heroInventoryService', function (journalService, $interval, heroInventoryService) {
-        
-        this.calculatePrice = function (basePrice, priceRatio, numOwnedProperties) {
-            return basePrice * manualExp(priceRatio, numOwnedProperties);
-        };
+    buildingData.factory("buildingService", function () {
+        return {
+            calculatePrice: function(base, ratio, owned) {
+                return base * manualExp(ratio, owned);
+            }
+        }
+    });
+
+	buildingData.controller("BuildingCtrl", ['journalService', 'buildingService', '$interval', 'heroInventoryService', function (journalService, $interval, heroInventoryService, buildingService) {
         
         this.miningTown = {
             
